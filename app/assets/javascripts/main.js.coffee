@@ -10,13 +10,13 @@
     vertexCoord: gl.getAttribLocation(program, "vertexCoord")
 
   uniforms =
-    transformationMatrix: gl.getUniformLocation(program, "transformationMatrix")
+    hueAdjust: gl.getUniformLocation(program, "hueAdjust")
 
   buffers =
     vertexColor: gl.createBuffer()
     vertexCoord: gl.createBuffer()
 
-  data =
+  attributeData =
     vertexColor: new Float32Array([
       1, 1, 0
       0, 0, 1
@@ -31,12 +31,12 @@
   # Populate Colors
 
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexColor)
-  gl.bufferData(gl.ARRAY_BUFFER, data.vertexColor, gl.STATIC_DRAW)
+  gl.bufferData(gl.ARRAY_BUFFER, attributeData.vertexColor, gl.STATIC_DRAW)
 
   # Populate Coords
 
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.vertexCoord)
-  gl.bufferData(gl.ARRAY_BUFFER, data.vertexCoord, gl.STATIC_DRAW)
+  gl.bufferData(gl.ARRAY_BUFFER, attributeData.vertexCoord, gl.STATIC_DRAW)
 
   # Pass Colors
 
@@ -64,5 +64,11 @@
     0
   )
 
+  clock = new Clock()
+  clock.start()
+  hueAdjust = 0
+
   runEveryFrame ->
+    hueAdjust += clock.getDelta() / 1000
+    gl.uniform1fv(uniforms.hueAdjust, new Float32Array([hueAdjust]))
     gl.drawArrays(gl.TRIANGLES, 0, 3)
