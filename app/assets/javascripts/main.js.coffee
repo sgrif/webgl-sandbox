@@ -10,7 +10,7 @@
     vertexCoord: gl.getAttribLocation(program, "vertexCoord")
 
   uniforms =
-    hueAdjust: gl.getUniformLocation(program, "hueAdjust")
+    transformation: gl.getUniformLocation(program, "transformation")
 
   buffers =
     vertexColor: gl.createBuffer()
@@ -66,6 +66,17 @@
 
   clock = new Clock()
   clock.start()
+  move = 0
+  angle = 0
 
   runEveryFrame ->
+    delta = clock.getDelta()
+    move +=  delta / 1000 * (2*Math.PI) / 5
+    angle += delta / 100000 * 45
+    translation = Matrix4.translation(x: Math.sin(move), y: 0, z: 0)
+    rotation = Matrix4.rotation(angle, x: 0, y: 0, z: 1)
+    transformation = translation.times(rotation)
+
+    gl.uniformMatrix4fv(uniforms.transformation, false, transformation.elements)
+
     gl.drawArrays(gl.TRIANGLES, 0, 3)
