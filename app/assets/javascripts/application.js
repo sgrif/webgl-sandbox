@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require lodash
+//= require gl-matrix
 //= require_tree .
 
 main()
