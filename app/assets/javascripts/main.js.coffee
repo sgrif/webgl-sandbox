@@ -66,9 +66,6 @@
 
   clock = new Clock()
   clock.start()
-  hueAdjust = 0
 
   runEveryFrame ->
-    hueAdjust += clock.getDelta() / 1000
-    gl.uniform1fv(uniforms.hueAdjust, new Float32Array([hueAdjust]))
     gl.drawArrays(gl.TRIANGLES, 0, 3)
