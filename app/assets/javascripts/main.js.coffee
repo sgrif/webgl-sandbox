@@ -11,7 +11,9 @@
     vertexUv: gl.getAttribLocation(program, "vertexUv")
 
   uniforms =
-    mvp: gl.getUniformLocation(program, "mvp")
+    mv: gl.getUniformLocation(program, "mv")
+    p: gl.getUniformLocation(program, "p")
+    normalMatrix: gl.getUniformLocation(program, "normalMatrix")
     textureSampler: gl.getUniformLocation(program, "textureSampler")
 
   buffers =
@@ -166,9 +168,10 @@
     vec3.fromValues(0, 1, 0)
   )
   projection = mat4.perspective([], 45, canvas.width/canvas.height, 0.1, 10)
-  mvp = []
-  mat4.mul(mvp, projection, view)
-  mat4.mul(mvp, mvp, model)
+  mv = mat4.mul([], view, model)
+
+  normalMatrix = mat3.normalFromMat4([], mv)
+  gl.uniformMatrix3fv(uniforms.normalMatrix, false, normalMatrix)
 
   clock = new Clock()
   clock.start()
@@ -182,7 +185,8 @@
       yAxis = vec3.fromValues(0, 1, 0)
       anim = mat4.rotate([], mat4.create(), rotation, yAxis)
 
-      gl.uniformMatrix4fv(uniforms.mvp, false, mat4.mul([], mvp, anim))
+      gl.uniformMatrix4fv(uniforms.mv, false, mat4.mul([], mv, anim))
+      gl.uniformMatrix4fv(uniforms.p, false, projection)
 
       texture.render(gl)
 
