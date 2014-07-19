@@ -157,7 +157,7 @@
       2
     )
     perspective:
-      matrix: Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 10)
+      matrix: Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 15)
 
   gui = new dat.GUI()
 

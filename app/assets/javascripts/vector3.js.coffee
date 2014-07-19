@@ -9,17 +9,17 @@ class @Vector3
 
   multiplyScalar: (s) -> new Vector3(@x * s, @y * s, @z * s)
 
-  cross: ({ x, y, z }) ->
-    newX = @y * z - @z * y
-    newY = @z * x - @x * z
-    newZ = @x * y - @y * x
-    new Vector3(newX, newY, newZ)
-
   divideScalar: (scalar) ->
     if scalar != 0
       new Vector3(@x / scalar, @y / scalar, @z / scalar)
     else
       new Vector3(0, 0, 0)
+
+  cross: ({ x, y, z }) ->
+    newX = @y * z - @z * y
+    newY = @z * x - @x * z
+    newZ = @x * y - @y * x
+    new Vector3(newX, newY, newZ)
 
   normalize: ->
     @divideScalar(@length)
