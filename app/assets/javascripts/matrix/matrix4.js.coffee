@@ -81,3 +81,14 @@ class @Matrix4
     ])
 
     rotation.times(translation)
+
+  @perspective: (fovy, aspect, near, far) ->
+    fov = 1.0 / Math.tan(fovy / 2)
+    nearFar = 1 / (near - far)
+
+    new Matrix4([
+      fov / aspect, 0, 0, 0
+      0, fov, 0, 0
+      0, 0, (far + near) * nearFar, -1
+      0, 0, (2 * far * near) * nearFar, 0
+    ])

@@ -171,7 +171,7 @@
     new Vector3(0, 0, -4)
     new Vector3(0, 1, 0)
   )
-  projection = mat4.perspective(mat4.create(), 45, canvas.width/canvas.height, 0.1, 10)
+  projection = Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 10)
 
   normalMatrix = mat3.normalFromMat4(mat3.create(), view.times(model).elements)
   gl.uniformMatrix3fv(uniforms.normalMatrix, false, normalMatrix)
@@ -225,7 +225,7 @@
 
       gl.uniformMatrix4fv(uniforms.m, false, model.times(anim).elements)
       gl.uniformMatrix4fv(uniforms.v, false, view.elements)
-      gl.uniformMatrix4fv(uniforms.p, false, projection)
+      gl.uniformMatrix4fv(uniforms.p, false, projection.elements)
       gl.uniform4fv(uniforms.lightPosition, new Float32Array([
         light.position.x, light.position.y
         light.position.z, light.position.w
