@@ -183,9 +183,9 @@
     position: x: -1.0, y: -2.0, z: 1.0, w: 1.0
 
   lightGui = gui.addFolder("Light Position")
-  lightGui.add(light.position, 'x', -10, 10)
-  lightGui.add(light.position, 'y', -10, 10)
-  lightGui.add(light.position, 'z', -10, 10)
+  lightGui.add(light.position, "x", -10, 10)
+  lightGui.add(light.position, "y", -10, 10)
+  lightGui.add(light.position, "z", -10, 10)
 
   rotation =
     x: 0
@@ -193,27 +193,14 @@
     z: 0
 
   rotationGui = gui.addFolder("Model Rotation")
-  rotationGui.add(rotation, 'x', -2 * Math.PI, 2 * Math.PI)
-  rotationGui.add(rotation, 'y', -2 * Math.PI, 2 * Math.PI)
-  rotationGui.add(rotation, 'z', -2 * Math.PI, 2 * Math.PI)
-
-  transparency =
-    blend: false
-    alpha: 1
-  transparencyGui = gui.addFolder("Transparency")
-  transparencyGui.add(transparency, 'blend')
-  transparencyGui.add(transparency, 'alpha', 0, 1)
+  rotationGui.add(rotation, "x", -2 * Math.PI, 2 * Math.PI)
+  rotationGui.add(rotation, "y", -2 * Math.PI, 2 * Math.PI)
+  rotationGui.add(rotation, "z", -2 * Math.PI, 2 * Math.PI)
 
   runEveryFrame ->
     if texture.loaded
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-      if transparency.blend
-        gl.enable(gl.BLEND)
-        gl.disable(gl.DEPTH_TEST)
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE)
-      else
-        gl.disable(gl.BLEND)
-        gl.enable(gl.DEPTH_TEST)
+      gl.enable(gl.DEPTH_TEST)
 
       rotatedModel = model.rotateEuler(rotation)
 
@@ -225,7 +212,6 @@
         light.position.x, light.position.y
         light.position.z, light.position.w
       ]))
-      gl.uniform1fv(uniforms.alpha, new Float32Array([transparency.alpha]))
 
       texture.render(gl)
 
