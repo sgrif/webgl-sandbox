@@ -15,17 +15,26 @@
     ambientLight: ColorUniform.build(gl, program, "ambientColor")
     textureSampler: Uniform.build(gl, program, "textureSampler", "uniform1i")
 
-  drawScene = setupMoon(gl, program, uniforms.textureSampler)
+  drawMoon = setupMoon(gl, program, uniforms.textureSampler)
+  # drawCrate = setupCrate(gl, program, uniforms.textureSampler)
 
   model = new Object3d(position: x: 0, y: 0, z: 0)
   camera =
     position: new OrbitalObject3d(
       new Vector3(0, 0, 0)
-      new CartesianCoordinate(0, 2, 6).sphericCoordinates
+      new CartesianCoordinate(0, 2, 20).sphericCoordinates
       2
     )
     perspective:
-      matrix: Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 15)
+      matrix: Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 100)
+
+  moon = new Object3d
+    position: new Vector3(5, 0, 0)
+    rotation: new CartesianCoordinate(0, 0, 0)
+
+  crate = new Object3d
+    position: new Vector3(5, 0, 0)
+    rotation: new CartesianCoordinate(0, 0, 0)
 
   gui = new dat.GUI()
 
@@ -67,4 +76,5 @@
     uniforms.lightPosition.set(gl, light.position)
     uniforms.ambientLight.set(gl, ambient)
 
-    drawScene()
+    drawMoon()
+    # drawCrate()
