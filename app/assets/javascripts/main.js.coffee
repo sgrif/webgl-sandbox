@@ -12,15 +12,16 @@
     p: Matrix4Uniform.build(gl, program, "p")
     normalMatrix: Matrix3Uniform.build(gl, program, "normalMatrix")
     lightPosition: Vector4Uniform.build(gl, program, "lightPosition")
+    ambientLight: ColorUniform.build(gl, program, "ambientColor")
     textureSampler: Uniform.build(gl, program, "textureSampler", "uniform1i")
 
-  drawScene = setupCrate(gl, program, uniforms.textureSampler)
+  drawScene = setupMoon(gl, program, uniforms.textureSampler)
 
-  model = new Object3d(position: x: 0, y: 0, z: -4)
+  model = new Object3d(position: x: 0, y: 0, z: 0)
   camera =
     position: new OrbitalObject3d(
-      new Vector3(0, 0, -4)
-      new CartesianCoordinate(0, 2, 4).sphericCoordinates
+      new Vector3(0, 0, 0)
+      new CartesianCoordinate(0, 2, 6).sphericCoordinates
       2
     )
     perspective:
@@ -28,8 +29,15 @@
 
   gui = new dat.GUI()
 
+  ambient = r: 0.1, g: 0.1, b: 0.1
+
+  ambientGui = gui.addFolder("Ambient Light")
+  ambientGui.add(ambient, "r", 0, 1)
+  ambientGui.add(ambient, "g", 0, 1)
+  ambientGui.add(ambient, "b", 0, 1)
+
   light =
-    position: x: -1.0, y: -2.0, z: 1.0, w: 1.0
+    position: x: -1.0, y: -6.0, z: 2, w: 1.0
 
   lightGui = gui.addFolder("Light Position")
   lightGui.add(light.position, "x", -10, 10)
@@ -62,5 +70,6 @@
     uniforms.p.set(gl, camera.perspective.matrix)
     uniforms.normalMatrix.set(gl, camera.position.matrix.normalsFor(rotatedModel.matrix))
     uniforms.lightPosition.set(gl, light.position)
+    uniforms.ambientLight.set(gl, ambient)
 
     drawScene()

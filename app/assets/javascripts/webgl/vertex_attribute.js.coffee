@@ -13,6 +13,7 @@ class @VertexAttribute
       0
       0
     )
+    buffer.unbind(gl)
 
   @build: (gl, program, name) ->
     new this(gl.getAttribLocation(program, name))

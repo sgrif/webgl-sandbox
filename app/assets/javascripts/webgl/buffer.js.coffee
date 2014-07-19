@@ -4,6 +4,9 @@ class @Buffer
   bind: (gl) ->
     gl.bindBuffer(@type, @buffer)
 
+  unbind: (gl) ->
+    gl.bindBuffer(@type, null)
+
   data: (gl, data) ->
     gl.bufferData(@type, data, gl.STATIC_DRAW)
 

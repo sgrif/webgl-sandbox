@@ -8,9 +8,9 @@ varying vec3 lightWeighting;
 uniform mat4 m, v, p;
 uniform mat3 normalMatrix;
 uniform vec4 lightPosition;
+uniform vec3 ambientColor;
 
 const vec3 lightDiffuseColor = vec3(1.0, 1.0, 1.0);
-const vec3 ambientColor = vec3(0.2, 0.2, 0.2);
 
 void main() {
   mat4 mvp = p * v * m;

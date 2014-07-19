@@ -16,6 +16,7 @@
 //= require lodash
 //= require gl-matrix
 //= require dat.gui
+//= require webgl/index
 //= require_tree .
 
 main()
