@@ -61,6 +61,22 @@ class @Matrix4
       0, 0, 0, 1
     ]))
 
+  rotateEuler: ({ x, y, z }) ->
+    @rotateX(x)
+      .rotateY(y)
+      .rotateZ(z)
+
+  scale: ({ x, y, z }) ->
+    @times(new Matrix4([
+      x, 0, 0, 0
+      0, y, 0, 0
+      0, 0, z, 0
+      0, 0, 0, 1
+    ]))
+
+  normalsFor: (model) ->
+    mat3.normalFromMat4(mat3.create(), @times(model).elements)
+
   @lookingAt: (eye, target, up) ->
     z = eye.minus(target).normalize()
     x = up.cross(z).normalize()

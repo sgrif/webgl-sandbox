@@ -173,8 +173,7 @@
   )
   projection = Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 10)
 
-  normalMatrix = mat3.normalFromMat4(mat3.create(), view.times(model).elements)
-  gl.uniformMatrix3fv(uniforms.normalMatrix, false, normalMatrix)
+  gl.uniformMatrix3fv(uniforms.normalMatrix, false, view.normalsFor(model))
 
   clock = new Clock()
   clock.start()
@@ -218,12 +217,7 @@
         gl.disable(gl.BLEND)
         gl.enable(gl.DEPTH_TEST)
 
-      anim = new Matrix4()
-        .rotateX(rotation.x)
-        .rotateY(rotation.y)
-        .rotateZ(rotation.z)
-
-      gl.uniformMatrix4fv(uniforms.m, false, model.times(anim).elements)
+      gl.uniformMatrix4fv(uniforms.m, false, model.rotateEuler(rotation).elements)
       gl.uniformMatrix4fv(uniforms.v, false, view.elements)
       gl.uniformMatrix4fv(uniforms.p, false, projection.elements)
       gl.uniform4fv(uniforms.lightPosition, new Float32Array([
