@@ -4,7 +4,6 @@
 
   program = createProgramWithShaders(gl, "main_vertex", "main_fragment")
   gl.useProgram(program)
-  gl.enable(gl.DEPTH_TEST)
 
   attributes =
     vertexCoord: gl.getAttribLocation(program, "vertexCoord")
@@ -17,6 +16,7 @@
     p: gl.getUniformLocation(program, "p")
     normalMatrix: gl.getUniformLocation(program, "normalMatrix")
     lightPosition: gl.getUniformLocation(program, "lightPosition")
+    alpha: gl.getUniformLocation(program, "alpha")
     textureSampler: gl.getUniformLocation(program, "textureSampler")
 
   buffers =
@@ -201,9 +201,23 @@
   rotationGui.add(rotation, 'y', -2 * Math.PI, 2 * Math.PI)
   rotationGui.add(rotation, 'z', -2 * Math.PI, 2 * Math.PI)
 
+  transparency =
+    blend: false
+    alpha: 1
+  transparencyGui = gui.addFolder("Transparency")
+  transparencyGui.add(transparency, 'blend')
+  transparencyGui.add(transparency, 'alpha', 0, 1)
+
   runEveryFrame ->
     if texture.loaded
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+      if transparency.blend
+        gl.enable(gl.BLEND)
+        gl.disable(gl.DEPTH_TEST)
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE)
+      else
+        gl.disable(gl.BLEND)
+        gl.enable(gl.DEPTH_TEST)
 
       anim = mat4.create()
       mat4.rotateX(anim, anim, rotation.x)
@@ -217,6 +231,7 @@
         light.position.x, light.position.y
         light.position.z, light.position.w
       ]))
+      gl.uniform1fv(uniforms.alpha, new Float32Array([transparency.alpha]))
 
       texture.render(gl)
 

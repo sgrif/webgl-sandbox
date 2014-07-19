@@ -3,7 +3,7 @@ attribute vec2 vertexUv;
 attribute vec3 vertexNormal;
 
 varying vec2 fragmentUv;
-varying vec4 diffuseColor;
+varying vec3 lightWeighting;
 
 uniform mat4 m, v, p;
 uniform mat3 normalMatrix;
@@ -20,6 +20,6 @@ void main() {
   vec3 lightDirection = normalize(vec3(lightPosition));
   float lightDiffuseWeight = max(0.0, dot(normalDirection, lightDirection));
 
-  diffuseColor = vec4(ambientColor + lightDiffuseColor * lightDiffuseWeight, 1.0);
+  lightWeighting = ambientColor + lightDiffuseColor * lightDiffuseWeight;
   fragmentUv = vertexUv;
 }
