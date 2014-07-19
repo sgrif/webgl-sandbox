@@ -17,7 +17,7 @@ void main() {
   gl_Position = mvp * vec4(vertexCoord, 1);
 
   vec3 normalDirection = normalize(normalMatrix * vertexNormal);
-  vec3 lightDirection = normalize(vec3(lightPosition));
+  vec3 lightDirection = normalize(normalMatrix * vec3(lightPosition));
   float lightDiffuseWeight = max(0.0, dot(normalDirection, lightDirection));
 
   lightWeighting = ambientColor + lightDiffuseColor * lightDiffuseWeight;

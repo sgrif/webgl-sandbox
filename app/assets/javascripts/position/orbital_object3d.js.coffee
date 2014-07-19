@@ -1,14 +1,11 @@
 class @OrbitalObject3d
-  constructor: (@center, @rotation, @distance) ->
+  constructor: (@center, @rotation) ->
 
   Object.defineProperties @prototype,
     matrix:
       get: ->
-        @_matrix ?= new Matrix4.lookingAt(@eye, @center, Vector3.UP)
+        new Matrix4.lookingAt(@eye, @center, Vector3.UP)
 
     eye:
       get: ->
-        @_eye ?= @rotation
-          .cartesianCoordinates
-          .multiplyScalar(@distance)
-          .plus(@center)
+        @rotation.cartesianCoordinates.plus(@center)

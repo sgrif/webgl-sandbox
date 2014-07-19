@@ -153,7 +153,7 @@
   camera =
     position: new OrbitalObject3d(
       new Vector3(0, 0, -4)
-      new CartesianCoordinate(0, 1, 2)
+      new CartesianCoordinate(0, 2, 4).sphericCoordinates
       2
     )
     perspective:
@@ -178,6 +178,11 @@
   rotationGui.add(rotation, "x", -2 * Math.PI, 2 * Math.PI)
   rotationGui.add(rotation, "y", -2 * Math.PI, 2 * Math.PI)
   rotationGui.add(rotation, "z", -2 * Math.PI, 2 * Math.PI)
+
+  cameraRotationGui = gui.addFolder("Camera Rotation")
+  cameraRotationGui.add(camera.position.rotation, "radius", 1, 10)
+  cameraRotationGui.add(camera.position.rotation, "polar", -2 * Math.PI, 2 * Math.PI)
+  cameraRotationGui.add(camera.position.rotation, "azimuth", -2 * Math.PI, 2 * Math.PI)
 
   runEveryFrame ->
     if texture.loaded
