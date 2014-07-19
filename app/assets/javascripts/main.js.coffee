@@ -1,6 +1,7 @@
 @main = ->
   canvas = document.getElementById("canvas")
   gl = canvas.getContext("webgl")
+  gl.clearColor(0, 0, 0, 1)
 
   program = createProgramWithShaders(gl, "main_vertex", "main_fragment")
   gl.useProgram(program)
@@ -193,7 +194,7 @@
 
   rotation =
     x: 0
-    y: 0
+    y: Math.PI / 6
     z: 0
 
   rotationGui = gui.addFolder("Model Rotation")
