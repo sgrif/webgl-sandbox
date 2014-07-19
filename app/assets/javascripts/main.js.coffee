@@ -54,11 +54,6 @@
   rotationGui.add(rotation, "y", -2 * Math.PI, 2 * Math.PI)
   rotationGui.add(rotation, "z", -2 * Math.PI, 2 * Math.PI)
 
-  cameraRotationGui = gui.addFolder("Camera Rotation")
-  cameraRotationGui.add(camera.position.rotation, "radius", 1, 10)
-  cameraRotationGui.add(camera.position.rotation, "polar", -2 * Math.PI, 2 * Math.PI)
-  cameraRotationGui.add(camera.position.rotation, "azimuth", -2 * Math.PI, 2 * Math.PI)
-
   runEveryFrame ->
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     gl.enable(gl.DEPTH_TEST)
