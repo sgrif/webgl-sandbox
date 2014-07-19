@@ -13,6 +13,6 @@ class @Object3d
   Object.defineProperties @prototype,
     matrix:
       get: ->
-        @_matrix ?= new Matrix4()
+        new Matrix4()
           .translate(@position)
           .rotateEuler(@rotation)
