@@ -11,14 +11,14 @@
     vertexUv: gl.getAttribLocation(program, "vertexUv")
     vertexNormal: gl.getAttribLocation(program, "vertexNormal")
 
+
   uniforms =
-    m: gl.getUniformLocation(program, "m")
-    v: gl.getUniformLocation(program, "v")
-    p: gl.getUniformLocation(program, "p")
-    normalMatrix: gl.getUniformLocation(program, "normalMatrix")
-    lightPosition: gl.getUniformLocation(program, "lightPosition")
-    alpha: gl.getUniformLocation(program, "alpha")
-    textureSampler: gl.getUniformLocation(program, "textureSampler")
+    m: Matrix4Uniform.build(gl, program, "m")
+    v: Matrix4Uniform.build(gl, program, "v")
+    p: Matrix4Uniform.build(gl, program, "p")
+    normalMatrix: Matrix3Uniform.build(gl, program, "normalMatrix")
+    lightPosition: Vector4Uniform.build(gl, program, "lightPosition")
+    textureSampler: Uniform.build(gl, program, "textureSampler", "uniform1i")
 
   buffers =
     vertexCoord: gl.createBuffer()
@@ -204,14 +204,11 @@
 
       rotatedModel = model.rotateEuler(rotation)
 
-      gl.uniformMatrix3fv(uniforms.normalMatrix, false, view.normalsFor(rotatedModel))
-      gl.uniformMatrix4fv(uniforms.m, false, rotatedModel.elements)
-      gl.uniformMatrix4fv(uniforms.v, false, view.elements)
-      gl.uniformMatrix4fv(uniforms.p, false, projection.elements)
-      gl.uniform4fv(uniforms.lightPosition, new Float32Array([
-        light.position.x, light.position.y
-        light.position.z, light.position.w
-      ]))
+      uniforms.m.set(gl, rotatedModel)
+      uniforms.v.set(gl, view)
+      uniforms.p.set(gl, projection)
+      uniforms.normalMatrix.set(gl, view.normalsFor(rotatedModel))
+      uniforms.lightPosition.set(gl, light.position)
 
       texture.render(gl)
 

@@ -21,4 +21,4 @@ class @Texture
   render: (gl) ->
     gl.activeTexture(gl.TEXTURE0)
     gl.bindTexture(gl.TEXTURE_2D, @texture)
-    gl.uniform1i(@uniform, 0)
+    @uniform.set(gl, 0)
