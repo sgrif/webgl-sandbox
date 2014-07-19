@@ -165,7 +165,7 @@
   texture = new Texture("/crate.gif", uniforms.textureSampler)
   texture.load(gl)
 
-  model = mat4.translate(mat4.create(), mat4.create(), vec3.fromValues(0, 0, -4))
+  model = new Matrix4().translate(x: 0, y: 0, z: -4)
   view = mat4.lookAt(
     mat4.create()
     vec3.fromValues(0, 2, 0)
@@ -173,7 +173,7 @@
     vec3.fromValues(0, 1, 0)
   )
   projection = mat4.perspective(mat4.create(), 45, canvas.width/canvas.height, 0.1, 10)
-  mv = mat4.mul(mat4.create(), view, model)
+  mv = mat4.mul(mat4.create(), view, model.elements)
 
   normalMatrix = mat3.normalFromMat4(mat3.create(), mv)
   gl.uniformMatrix3fv(uniforms.normalMatrix, false, normalMatrix)
@@ -224,8 +224,9 @@
       mat4.rotateX(anim, anim, rotation.x)
       mat4.rotateY(anim, anim, rotation.y)
       mat4.rotateZ(anim, anim, rotation.z)
+      anim = new Matrix4(anim)
 
-      gl.uniformMatrix4fv(uniforms.m, false, mat4.mul(mat4.create(), model, anim))
+      gl.uniformMatrix4fv(uniforms.m, false, model.times(anim).elements)
       gl.uniformMatrix4fv(uniforms.v, false, view)
       gl.uniformMatrix4fv(uniforms.p, false, projection)
       gl.uniform4fv(uniforms.lightPosition, new Float32Array([
