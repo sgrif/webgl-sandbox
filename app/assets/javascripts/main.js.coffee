@@ -220,11 +220,10 @@
         gl.disable(gl.BLEND)
         gl.enable(gl.DEPTH_TEST)
 
-      anim = mat4.create()
-      mat4.rotateX(anim, anim, rotation.x)
-      mat4.rotateY(anim, anim, rotation.y)
-      mat4.rotateZ(anim, anim, rotation.z)
-      anim = new Matrix4(anim)
+      anim = new Matrix4()
+        .rotateX(rotation.x)
+        .rotateY(rotation.y)
+        .rotateZ(rotation.z)
 
       gl.uniformMatrix4fv(uniforms.m, false, model.times(anim).elements)
       gl.uniformMatrix4fv(uniforms.v, false, view)

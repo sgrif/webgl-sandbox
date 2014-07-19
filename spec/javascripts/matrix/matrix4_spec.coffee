@@ -27,10 +27,10 @@ describe "Matrix4", ->
   ])
 
   it "can be given an initial set of elements", ->
-    expect(matA.at(0, 3)).toBe(1)
-    expect(matA.at(1, 3)).toBe(2)
-    expect(matB.at(0, 3)).toBe(4)
-    expect(matB.at(1, 3)).toBe(5)
+    expect(matA.at(3, 0)).toBe(1)
+    expect(matA.at(3, 1)).toBe(2)
+    expect(matB.at(3, 0)).toBe(4)
+    expect(matB.at(3, 1)).toBe(5)
 
   it "is an identity matrix by default", ->
     expect(new Matrix4()).toEqual(id)
@@ -152,3 +152,47 @@ describe "Matrix4", ->
       vector = x: 0, y: 0, z: 1
 
       expect(original.translate(vector)).toEqual(expected)
+
+  describe "#rotateX", ->
+    it "rotates on the x axis", ->
+      angleInRadians = Math.PI / 2
+      expected = new Matrix4([
+        1, 0, 0, 0,
+        0, Math.cos(angleInRadians), Math.sin(angleInRadians), 0,
+        0, -Math.sin(angleInRadians), Math.cos(angleInRadians), 0,
+        1, 2, 3, 1
+      ])
+
+      expect(matA.rotateX(angleInRadians)).toEqualMatrix(expected)
+
+  describe "#rotateY", ->
+    it "rotates on the y axis", ->
+      angleInRadians = Math.PI / 2
+      expected = new Matrix4([
+        Math.cos(angleInRadians), 0, -Math.sin(angleInRadians), 0
+        0, 1, 0, 0
+        Math.sin(angleInRadians), 0, Math.cos(angleInRadians), 0
+        1, 2, 3, 1
+      ])
+
+      expect(matA.rotateY(angleInRadians)).toEqualMatrix(expected)
+
+  describe "#rotateZ", ->
+    it "rotates on the z axis", ->
+      angleInRadians = Math.PI / 2
+      expected = new Matrix4([
+        Math.cos(angleInRadians), Math.sin(angleInRadians), 0, 0
+        -Math.sin(angleInRadians), Math.cos(angleInRadians), 0, 0
+        0, 0, 1, 0
+        1, 2, 3, 1
+      ])
+
+      expect(matA.rotateZ(angleInRadians)).toEqualMatrix(expected)
+
+  beforeEach ->
+    @addMatchers
+      toEqualMatrix: (expected) ->
+        for element, i in @actual.elements
+          y = Math.floor(i / 4)
+          x = i % 4
+          expect(element).toBeCloseTo(expected.elements[i], 8, "at #{y}, #{x}")
