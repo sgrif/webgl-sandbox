@@ -60,3 +60,24 @@ class @Matrix4
       0, 0, 1, 0
       0, 0, 0, 1
     ]))
+
+  @lookingAt: (eye, target, up) ->
+    z = eye.minus(target).normalize()
+    x = up.cross(z).normalize()
+    y = z.cross(x)
+
+    rotation = new Matrix4([
+      x.x, y.x, z.x, 0
+      x.y, y.y, z.y, 0
+      x.z, y.z, z.z, 0
+      0, 0, 0, 1
+    ])
+
+    translation = new Matrix4([
+      1, 0, 0, 0
+      0, 1, 0, 0
+      0, 0, 1, 0
+      -eye.x, -eye.y, -eye.z, 1
+    ])
+
+    rotation.times(translation)

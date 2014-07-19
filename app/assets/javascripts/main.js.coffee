@@ -166,16 +166,14 @@
   texture.load(gl)
 
   model = new Matrix4().translate(x: 0, y: 0, z: -4)
-  view = mat4.lookAt(
-    mat4.create()
-    vec3.fromValues(0, 2, 0)
-    vec3.fromValues(0, 0, -4)
-    vec3.fromValues(0, 1, 0)
+  view = Matrix4.lookingAt(
+    new Vector3(0, 2, 0)
+    new Vector3(0, 0, -4)
+    new Vector3(0, 1, 0)
   )
   projection = mat4.perspective(mat4.create(), 45, canvas.width/canvas.height, 0.1, 10)
-  mv = mat4.mul(mat4.create(), view, model.elements)
 
-  normalMatrix = mat3.normalFromMat4(mat3.create(), mv)
+  normalMatrix = mat3.normalFromMat4(mat3.create(), view.times(model).elements)
   gl.uniformMatrix3fv(uniforms.normalMatrix, false, normalMatrix)
 
   clock = new Clock()
@@ -226,7 +224,7 @@
         .rotateZ(rotation.z)
 
       gl.uniformMatrix4fv(uniforms.m, false, model.times(anim).elements)
-      gl.uniformMatrix4fv(uniforms.v, false, view)
+      gl.uniformMatrix4fv(uniforms.v, false, view.elements)
       gl.uniformMatrix4fv(uniforms.p, false, projection)
       gl.uniform4fv(uniforms.lightPosition, new Float32Array([
         light.position.x, light.position.y
