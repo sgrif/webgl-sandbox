@@ -150,12 +150,14 @@
   texture.load(gl)
 
   cube = new Object3d(position: x: 0, y: 0, z: -4)
-  view = Matrix4.lookingAt(
-    new Vector3(0, 2, 0)
-    new Vector3(0, 0, -4)
-    new Vector3(0, 1, 0)
-  )
-  projection = Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 10)
+  camera =
+    position: new OrbitalObject3d(
+      new Vector3(0, 0, -4)
+      new CartesianCoordinate(0, 1, 2)
+      2
+    )
+    perspective:
+      matrix: Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 10)
 
   gui = new dat.GUI()
 
@@ -185,9 +187,9 @@
       rotatedCube = cube.rotate(rotation)
 
       uniforms.m.set(gl, rotatedCube.matrix)
-      uniforms.v.set(gl, view)
-      uniforms.p.set(gl, projection)
-      uniforms.normalMatrix.set(gl, view.normalsFor(rotatedCube.matrix))
+      uniforms.v.set(gl, camera.position.matrix)
+      uniforms.p.set(gl, camera.perspective.matrix)
+      uniforms.normalMatrix.set(gl, camera.position.matrix.normalsFor(rotatedCube.matrix))
       uniforms.lightPosition.set(gl, light.position)
 
       texture.render(gl)

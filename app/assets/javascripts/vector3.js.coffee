@@ -1,10 +1,13 @@
 class @Vector3
   @ORIGIN = new this(0, 0, 0)
+  @UP = new this(0, 1, 0)
 
   constructor: (@x, @y, @z) ->
 
   plus: ({ x, y, z}) -> new Vector3(@x + x, @y + y, @z + z)
   minus: ({ x, y, z }) -> new Vector3(@x - x, @y - y, @z - z)
+
+  multiplyScalar: (s) -> new Vector3(@x * s, @y * s, @z * s)
 
   cross: ({ x, y, z }) ->
     newX = @y * z - @z * y
