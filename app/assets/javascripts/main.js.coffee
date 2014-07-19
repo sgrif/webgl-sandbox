@@ -9,6 +9,7 @@
   attributes =
     vertexCoord: gl.getAttribLocation(program, "vertexCoord")
     vertexUv: gl.getAttribLocation(program, "vertexUv")
+    vertexNormal: gl.getAttribLocation(program, "vertexNormal")
 
   uniforms =
     mv: gl.getUniformLocation(program, "mv")
@@ -20,6 +21,7 @@
     vertexCoord: gl.createBuffer()
     cubeElements: gl.createBuffer()
     vertexUv: gl.createBuffer()
+    vertexNormal: gl.createBuffer()
 
   bufferTypes =
     vertexCoord: gl.ARRAY_BUFFER

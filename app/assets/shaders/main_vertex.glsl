@@ -9,7 +9,7 @@ uniform mat4 mv;
 uniform mat4 p;
 uniform mat3 normalMatrix;
 
-const vec4 lightPosition = vec4(1.0, 1.0, -1.0, 0.0);
+const vec4 lightPosition = vec4(-1.0, 1.0, -1.0, 0.0);
 const vec4 lightDiffuseColor = vec4(1.0, 1.0, 1.0, 1.0);
 
 const vec4 materialDiffuseColor = vec4(1.0, 0.8, 0.8, 1.0);
