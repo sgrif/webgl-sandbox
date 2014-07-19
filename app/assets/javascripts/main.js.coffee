@@ -16,6 +16,8 @@
     v: gl.getUniformLocation(program, "v")
     p: gl.getUniformLocation(program, "p")
     normalMatrix: gl.getUniformLocation(program, "normalMatrix")
+    lightPosition: gl.getUniformLocation(program, "lightPosition")
+    lightDiffuseColor: gl.getUniformLocation(program, "lightDiffuseColor")
     textureSampler: gl.getUniformLocation(program, "textureSampler")
 
   buffers =
@@ -163,34 +165,59 @@
   texture = new Texture("/crate.gif", uniforms.textureSampler)
   texture.load(gl)
 
-  model = mat4.translate([], mat4.create(), vec3.fromValues(0, 0, -4))
+  model = mat4.translate(mat4.create(), mat4.create(), vec3.fromValues(0, 0, -4))
   view = mat4.lookAt(
-    []
+    mat4.create()
     vec3.fromValues(0, 2, 0)
     vec3.fromValues(0, 0, -4)
     vec3.fromValues(0, 1, 0)
   )
-  projection = mat4.perspective([], 45, canvas.width/canvas.height, 0.1, 10)
-  mv = mat4.mul([], view, model)
+  projection = mat4.perspective(mat4.create(), 45, canvas.width/canvas.height, 0.1, 10)
+  mv = mat4.mul(mat4.create(), view, model)
 
-  normalMatrix = mat3.normalFromMat4([], mv)
+  normalMatrix = mat3.normalFromMat4(mat3.create(), mv)
   gl.uniformMatrix3fv(uniforms.normalMatrix, false, normalMatrix)
 
   clock = new Clock()
   clock.start()
   rotation = 0
 
+  gui = new dat.GUI()
+
+  light =
+    position: x: -1.0, y: -2.0, z: 1.0, w: 1.0
+
+  lightGui = gui.addFolder("Light Position")
+  lightGui.add(light.position, 'x', -10, 10)
+  lightGui.add(light.position, 'y', -10, 10)
+  lightGui.add(light.position, 'z', -10, 10)
+
+  rotation =
+    x: 0
+    y: 0
+    z: 0
+
+  rotationGui = gui.addFolder("Model Rotation")
+  rotationGui.add(rotation, 'x', -2 * Math.PI, 2 * Math.PI)
+  rotationGui.add(rotation, 'y', -2 * Math.PI, 2 * Math.PI)
+  rotationGui.add(rotation, 'z', -2 * Math.PI, 2 * Math.PI)
+
   runEveryFrame ->
     if texture.loaded
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-      rotation += clock.getDelta() / 1000 * Math.PI / 6
-      yAxis = vec3.fromValues(0, 1, 0)
-      anim = mat4.rotate([], mat4.create(), rotation, yAxis)
+      anim = mat4.create()
+      mat4.rotateX(anim, anim, rotation.x)
+      mat4.rotateY(anim, anim, rotation.y)
+      mat4.rotateZ(anim, anim, rotation.z)
 
-      gl.uniformMatrix4fv(uniforms.m, false, mat4.mul([], model, anim))
+      gl.uniformMatrix4fv(uniforms.m, false, mat4.mul(mat4.create(), model, anim))
       gl.uniformMatrix4fv(uniforms.v, false, view)
       gl.uniformMatrix4fv(uniforms.p, false, projection)
+      gl.uniform4fv(uniforms.lightPosition, new Float32Array([
+        light.position.x, light.position.y
+        light.position.z, light.position.w
+      ]))
 
       texture.render(gl)
 

@@ -15,6 +15,7 @@
 //= require turbolinks
 //= require lodash
 //= require gl-matrix
+//= require dat.gui
 //= require_tree .
 
 main()
