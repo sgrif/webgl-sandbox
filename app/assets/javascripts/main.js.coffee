@@ -12,7 +12,8 @@
     vertexNormal: gl.getAttribLocation(program, "vertexNormal")
 
   uniforms =
-    mv: gl.getUniformLocation(program, "mv")
+    m: gl.getUniformLocation(program, "m")
+    v: gl.getUniformLocation(program, "v")
     p: gl.getUniformLocation(program, "p")
     normalMatrix: gl.getUniformLocation(program, "normalMatrix")
     textureSampler: gl.getUniformLocation(program, "textureSampler")
@@ -187,7 +188,8 @@
       yAxis = vec3.fromValues(0, 1, 0)
       anim = mat4.rotate([], mat4.create(), rotation, yAxis)
 
-      gl.uniformMatrix4fv(uniforms.mv, false, mat4.mul([], mv, anim))
+      gl.uniformMatrix4fv(uniforms.m, false, mat4.mul([], model, anim))
+      gl.uniformMatrix4fv(uniforms.v, false, view)
       gl.uniformMatrix4fv(uniforms.p, false, projection)
 
       texture.render(gl)
