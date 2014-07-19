@@ -1,12 +1,12 @@
 attribute vec3 vertexCoord;
-attribute vec3 vertexColor;
+attribute vec2 vertexUv;
 
-varying vec3 fragmentColor;
+varying vec2 fragmentUv;
 
 uniform mat4 mvp;
 
 void main() {
   gl_Position = mvp * vec4(vertexCoord, 1);
 
-  fragmentColor = vertexColor;
+  fragmentUv = vertexUv;
 }
