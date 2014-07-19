@@ -17,7 +17,6 @@
     p: gl.getUniformLocation(program, "p")
     normalMatrix: gl.getUniformLocation(program, "normalMatrix")
     lightPosition: gl.getUniformLocation(program, "lightPosition")
-    lightDiffuseColor: gl.getUniformLocation(program, "lightDiffuseColor")
     textureSampler: gl.getUniformLocation(program, "textureSampler")
 
   buffers =

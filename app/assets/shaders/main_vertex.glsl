@@ -9,7 +9,8 @@ uniform mat4 m, v, p;
 uniform mat3 normalMatrix;
 uniform vec4 lightPosition;
 
-const vec4 lightDiffuseColor = vec4(1.0, 1.0, 1.0, 1.0);
+const vec3 lightDiffuseColor = vec3(1.0, 1.0, 1.0);
+const vec3 ambientColor = vec3(0.2, 0.2, 0.2);
 
 void main() {
   mat4 mvp = p * v * m;
@@ -17,10 +18,8 @@ void main() {
 
   vec3 normalDirection = normalize(normalMatrix * vertexNormal);
   vec3 lightDirection = normalize(vec3(lightPosition));
+  float lightDiffuseWeight = max(0.0, dot(normalDirection, lightDirection));
 
-  vec3 color = vec3(lightDiffuseColor);
-  color *= max(0.0, dot(normalDirection, lightDirection));
-
-  diffuseColor = vec4(color, 1.0);
+  diffuseColor = vec4(ambientColor + lightDiffuseColor * lightDiffuseWeight, 1.0);
   fragmentUv = vertexUv;
 }
