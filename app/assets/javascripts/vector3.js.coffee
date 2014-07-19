@@ -1,8 +1,10 @@
 class @Vector3
+  @ORIGIN = new this(0, 0, 0)
+
   constructor: (@x, @y, @z) ->
 
-  minus: ({ x, y, z }) ->
-    new Vector3(@x - x, @y - y, @z - z)
+  plus: ({ x, y, z}) -> new Vector3(@x + x, @y + y, @z + z)
+  minus: ({ x, y, z }) -> new Vector3(@x - x, @y - y, @z - z)
 
   cross: ({ x, y, z }) ->
     newX = @y * z - @z * y

@@ -149,7 +149,7 @@
   texture = new Texture("/crate.gif", uniforms.textureSampler)
   texture.load(gl)
 
-  model = new Matrix4().translate(x: 0, y: 0, z: -4)
+  cube = new Object3d(position: x: 0, y: 0, z: -4)
   view = Matrix4.lookingAt(
     new Vector3(0, 2, 0)
     new Vector3(0, 0, -4)
@@ -182,12 +182,12 @@
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
       gl.enable(gl.DEPTH_TEST)
 
-      rotatedModel = model.rotateEuler(rotation)
+      rotatedCube = cube.rotate(rotation)
 
-      uniforms.m.set(gl, rotatedModel)
+      uniforms.m.set(gl, rotatedCube.matrix)
       uniforms.v.set(gl, view)
       uniforms.p.set(gl, projection)
-      uniforms.normalMatrix.set(gl, view.normalsFor(rotatedModel))
+      uniforms.normalMatrix.set(gl, view.normalsFor(rotatedCube.matrix))
       uniforms.lightPosition.set(gl, light.position)
 
       texture.render(gl)
