@@ -14,6 +14,8 @@
     normalMatrix: Matrix3Uniform.build(gl, program, "normalMatrix")
     lightPosition: Vector4Uniform.build(gl, program, "lightPosition")
     ambientLight: ColorUniform.build(gl, program, "ambientColor")
+    spotAngle: Uniform.build(gl, program, "spotAngle", "uniform1f")
+    penumbraAngle: Uniform.build(gl, program, "penumbraAngle", "uniform1f")
     textureSampler: Uniform.build(gl, program, "textureSampler", "uniform1i")
 
   drawScene = setupTeapot(gl, program, uniforms.textureSampler)
@@ -42,12 +44,16 @@
   ambientGui.add(ambient, "b", 0, 1)
 
   light =
-    position: x: -10, y: 4, z: 20, w: 1
+    position: x: 0, y: 0, z: 20, w: 1
+    spotAngle: 55
+    penumbraAngle: 10
 
   lightGui = gui.addFolder("Light Position")
   lightGui.add(light.position, "x", -30, 30)
   lightGui.add(light.position, "y", -30, 30)
   lightGui.add(light.position, "z", -30, 30)
+  lightGui.add(light, "spotAngle", 0, 90)
+  lightGui.add(light, "penumbraAngle", 0, 90)
 
   rotation =
     x: 0
@@ -78,6 +84,8 @@
     uniforms.cameraPosition.set(gl, camera.worldPosition)
     uniforms.lightPosition.set(gl, light.position)
     uniforms.ambientLight.set(gl, ambient)
+    uniforms.spotAngle.set(gl, light.spotAngle)
+    uniforms.penumbraAngle.set(gl, light.penumbraAngle)
 
     rotatedModel = teapot.rotate(rotation).matrix.times(model.matrix)
 
