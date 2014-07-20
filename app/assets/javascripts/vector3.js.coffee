@@ -1,6 +1,7 @@
 class @Vector3
   @ORIGIN = new this(0, 0, 0)
   @UP = new this(0, 1, 0)
+  @FULL_SCALE = new this(1, 1, 1)
 
   constructor: (@x, @y, @z) ->
 

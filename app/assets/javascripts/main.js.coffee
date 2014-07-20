@@ -18,21 +18,19 @@
     penumbraAngle: Uniform.build(gl, program, "penumbraAngle", "uniform1f")
     textureSampler: Uniform.build(gl, program, "textureSampler", "uniform1i")
 
-  drawScene = setupTeapot(gl, program, uniforms.textureSampler)
+  drawScene = setupMartialArtist(gl, program, uniforms.textureSampler)
 
-  model = new Object3d(position: x: 0, y: 0, z: 0)
+  model = new Object3d(position: { x: 0, y: 0, z: 0 })
   camera = new Camera
     position: new OrbitalObject3d(
-      new Vector3(0, 0, 0)
-      new SphericCoordinate(40, Math.PI / 2, 0)
+      new Vector3(0, 75, 0)
+      new SphericCoordinate(250, Math.PI / 2, 0)
     )
     perspective:
-      matrix: Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 100)
+      matrix: Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 2000)
 
   degToRad = (degrees) ->
     degrees * Math.PI / 180
-
-  teapot = new Object3d(rotation: new Vector3(degToRad(23.4), 0, degToRad(-23.4)))
 
   gui = new dat.GUI()
 
@@ -44,14 +42,17 @@
   ambientGui.add(ambient, "b", 0, 1)
 
   light =
-    position: x: 0, y: 0, z: 20, w: 1
+    position: new OrbitalObject3d(
+      new Vector3(0, 0, 0)
+      new SphericCoordinate(400, Math.PI / 2, 0)
+    )
     spotAngle: 55
     penumbraAngle: 10
 
   lightGui = gui.addFolder("Light Position")
-  lightGui.add(light.position, "x", -30, 30)
-  lightGui.add(light.position, "y", -30, 30)
-  lightGui.add(light.position, "z", -30, 30)
+  lightGui.add(light.position.rotation, "radius", -Math.PI / 2, Math.PI / 2)
+  lightGui.add(light.position.rotation, "polar", -Math.PI / 2, Math.PI / 2)
+  lightGui.add(light.position.rotation, "azimuth", -Math.PI / 2, Math.PI / 2)
   lightGui.add(light, "spotAngle", 0, 90)
   lightGui.add(light, "penumbraAngle", 0, 90)
 
@@ -66,12 +67,12 @@
   rotationGui.add(rotation, "z", -2 * Math.PI, 2 * Math.PI)
 
   cameraGui = gui.addFolder("Camera Position")
-  cameraGui.add(camera.position.center, "x", -30, 30)
-  cameraGui.add(camera.position.center, "y", -30, 30)
-  cameraGui.add(camera.position.center, "z", -30, 30)
+  cameraGui.add(camera.position.center, "x", -600, 600)
+  cameraGui.add(camera.position.center, "y", -600, 600)
+  cameraGui.add(camera.position.center, "z", -600, 600)
 
   cameraGui = gui.addFolder("Camera Rotation")
-  cameraGui.add(camera.position.rotation, "radius", 0, 100)
+  cameraGui.add(camera.position.rotation, "radius", 0, 2000)
   cameraGui.add(camera.position.rotation, "polar", -2 * Math.PI, 2 * Math.PI)
   cameraGui.add(camera.position.rotation, "azimuth", -2 * Math.PI, 2 * Math.PI)
 
@@ -82,12 +83,12 @@
     uniforms.v.set(gl, camera.position.matrix)
     uniforms.p.set(gl, camera.perspective.matrix)
     uniforms.cameraPosition.set(gl, camera.worldPosition)
-    uniforms.lightPosition.set(gl, light.position)
+    uniforms.lightPosition.set(gl, light.position.eye)
     uniforms.ambientLight.set(gl, ambient)
     uniforms.spotAngle.set(gl, light.spotAngle)
     uniforms.penumbraAngle.set(gl, light.penumbraAngle)
 
-    rotatedModel = teapot.rotate(rotation).matrix.times(model.matrix)
+    rotatedModel = model.rotate(rotation).matrix
 
     uniforms.m.set(gl, rotatedModel)
     uniforms.normalMatrix.set(gl, rotatedModel.normalMatrix)
