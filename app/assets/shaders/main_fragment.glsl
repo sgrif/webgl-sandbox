@@ -21,22 +21,15 @@ void main() {
   vec3 eyeDirection = normalize(vec3(cameraPosition - fragmentPosition));
   vec3 reflectionDirection = reflect(-lightDirection, normal);
   float specularWeight = pow(max(dot(reflectionDirection, eyeDirection), 0.0), shininess);
-
-  vec3 specularLight;
-
-  if (dot(normal, lightDirection) > 0.0) {
-    specularLight = lightSpecularColor * specularWeight;
-  } else {
-    specularLight = vec3(0.0, 0.0, 0.0);
-  }
+  vec3 specularLight = lightSpecularColor * specularWeight;
 
   // Diffuse
   float diffuseWeight = max(dot(normal, lightDirection), 0.0);
 
   // Apply lighting
-  vec3 lightWeight = ambientColor
+  vec3 diffuseLight = ambientColor
     + lightDiffuseColor * diffuseWeight;
 
   vec4 textureColor = texture2D(textureSampler, vec2(fragmentUv.s, fragmentUv.t));
-  gl_FragColor = textureColor * vec4(lightWeight, 1.0) + vec4(specularLight, 1.0);
+  gl_FragColor = textureColor * vec4(diffuseLight, 1.0) + vec4(specularLight, 1.0);
 }
