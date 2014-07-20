@@ -69,16 +69,16 @@
 
   faceElements = new Uint16Array(faceElements)
 
-  for name, attribute of attributes
-    attribute.populate(gl, buffers[name], attributeData[name])
-
-  buffers.faceElements.bind(gl)
-  buffers.faceElements.data(gl, faceElements)
-
-
   ->
     if texture.loaded
       texture.render(gl)
+
+      for name, attribute of attributes
+        attribute.populate(gl, buffers[name], attributeData[name])
+
+      buffers.faceElements.bind(gl)
+      buffers.faceElements.data(gl, faceElements)
+
 
       buffers.faceElements.bind(gl)
       gl.drawElements(gl.TRIANGLES, faceElements.length, gl.UNSIGNED_SHORT, 0)

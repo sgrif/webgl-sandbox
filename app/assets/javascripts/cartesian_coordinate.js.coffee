@@ -1,5 +1,9 @@
 #= require vector3
 class @CartesianCoordinate extends Vector3
+  plusSpheric: (spheric) ->
+    { x, y, z } = spheric.cartesianCoordinates
+    new @constructor(@x + x, @y + y, @z + z)
+
   Object.defineProperties @prototype,
     cartesianCoordinates:
       get: -> this

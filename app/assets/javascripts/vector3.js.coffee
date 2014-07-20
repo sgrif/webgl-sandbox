@@ -4,22 +4,22 @@ class @Vector3
 
   constructor: (@x, @y, @z) ->
 
-  plus: ({ x, y, z}) -> new Vector3(@x + x, @y + y, @z + z)
-  minus: ({ x, y, z }) -> new Vector3(@x - x, @y - y, @z - z)
+  plus: ({ x, y, z}) -> new @constructor(@x + x, @y + y, @z + z)
+  minus: ({ x, y, z }) -> new @constructor(@x - x, @y - y, @z - z)
 
-  multiplyScalar: (s) -> new Vector3(@x * s, @y * s, @z * s)
+  multiplyScalar: (s) -> new @constructor(@x * s, @y * s, @z * s)
 
   divideScalar: (scalar) ->
     if scalar != 0
-      new Vector3(@x / scalar, @y / scalar, @z / scalar)
+      new @constructor(@x / scalar, @y / scalar, @z / scalar)
     else
-      new Vector3(0, 0, 0)
+      new @constructor(0, 0, 0)
 
   cross: ({ x, y, z }) ->
     newX = @y * z - @z * y
     newY = @z * x - @x * z
     newZ = @x * y - @y * x
-    new Vector3(newX, newY, newZ)
+    new @constructor(newX, newY, newZ)
 
   normalize: ->
     @divideScalar(@length)

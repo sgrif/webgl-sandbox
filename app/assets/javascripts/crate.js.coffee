@@ -128,18 +128,18 @@
     20, 21, 22,   20, 22, 23  # Left face
   ])
 
-  for name, attribute of attributes
-    attribute.populate(gl, buffers[name], attributeData[name])
-
-  buffers.cubeElements.bind(gl)
-  buffers.cubeElements.data(gl, cubeElements)
-
   texture = new Texture("/crate.gif", textureSampler)
   texture.load(gl)
 
   ->
     if texture.loaded
       texture.render(gl)
+
+      for name, attribute of attributes
+        attribute.populate(gl, buffers[name], attributeData[name])
+
+      buffers.cubeElements.bind(gl)
+      buffers.cubeElements.data(gl, cubeElements)
 
       buffers.cubeElements.bind(gl)
       gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0)

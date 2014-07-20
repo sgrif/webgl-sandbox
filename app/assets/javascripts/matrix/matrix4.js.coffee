@@ -96,7 +96,7 @@ class @Matrix4
       -eye.x, -eye.y, -eye.z, 1
     ])
 
-    rotation.times(translation)
+    translation.times(rotation)
 
   @perspective: (fovy, aspect, near, far) ->
     fov = 1.0 / Math.tan(fovy / 2)
