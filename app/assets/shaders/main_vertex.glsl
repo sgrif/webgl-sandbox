@@ -13,11 +13,12 @@ uniform vec3 ambientColor;
 const vec3 lightDiffuseColor = vec3(1.0, 1.0, 1.0);
 
 void main() {
-  mat4 mvp = p * v * m;
-  gl_Position = mvp * vec4(vertexCoord, 1);
+  mat4 mv = v * m;
+  vec4 mvPosition = mv * vec4(vertexCoord, 1);
+  gl_Position = p * mvPosition;
 
   vec3 normalDirection = normalize(normalMatrix * vertexNormal);
-  vec3 lightDirection = normalize(vec3(lightPosition));
+  vec3 lightDirection = normalize(vec3(lightPosition - mvPosition));
   float lightDiffuseWeight = max(0.0, dot(normalDirection, lightDirection));
 
   lightWeighting = ambientColor + lightDiffuseColor * lightDiffuseWeight;

@@ -22,7 +22,7 @@
   camera =
     position: new OrbitalObject3d(
       new Vector3(0, 0, 0)
-      new SphericCoordinate(15, Math.PI / 2, 0)
+      new SphericCoordinate(20, Math.PI / 2 - 0.0872664626, 0)
       2
     )
     perspective:
@@ -48,12 +48,12 @@
   ambientGui.add(ambient, "b", 0, 1)
 
   light =
-    position: x: -1.0, y: -6.0, z: 2, w: 1.0
+    position: x: -15, y: -6.0, z: -10, w: 1.0
 
   lightGui = gui.addFolder("Light Position")
-  lightGui.add(light.position, "x", -10, 10)
-  lightGui.add(light.position, "y", -10, 10)
-  lightGui.add(light.position, "z", -10, 10)
+  lightGui.add(light.position, "x", -30, 30)
+  lightGui.add(light.position, "y", -30, 30)
+  lightGui.add(light.position, "z", -30, 30)
 
   rotation =
     radius: 0
