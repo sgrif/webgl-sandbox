@@ -20,11 +20,7 @@ void main() {
   vec3 eyeDirection = normalize(vec3(mvPosition));
   vec3 reflectionDirection = reflect(lightDirection, normal);
   float specularWeight = pow(max(dot(reflectionDirection, eyeDirection), 0.0), shininess);
-  vec3 specularLight = vec3(0.0, 0.0, 0.0);
-
-  if (dot(lightDirection, normal) > 0.0) {
-    specularLight = lightSpecularColor * specularWeight;
-  }
+  vec3 specularLight = lightSpecularColor * specularWeight;
 
   // Diffuse
   float diffuseWeight = max(dot(normal, lightDirection), 0.0);
