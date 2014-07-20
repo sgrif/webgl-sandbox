@@ -50,10 +50,6 @@
         hasUv = isBitSet(bitMask, 3)
         hasNormal = isBitSet(bitMask, 5)
 
-        pushUv = (vi, uvi) ->
-          attributeData.vertexUv.elements[vi * 2] = rawUvs[uvi * 2]
-          attributeData.vertexUv.elements[vi * 2 + 1] = rawUvs[uvi * 2 + 1]
-
         faces = []
         if isQuad
           faces.push(data.faces[x])
@@ -66,33 +62,13 @@
 
           x += 4
           x++ if hasMaterial
-
-          if hasUv
-            pushUv(faces[0], data.faces[x])
-            pushUv(faces[1], data.faces[x+1])
-            pushUv(faces[2], data.faces[x+3])
-
-            pushUv(faces[3], data.faces[x+1])
-            pushUv(faces[4], data.faces[x+2])
-            pushUv(faces[5], data.faces[x+3])
-            x += 4
-
+          x += 4 if hasUv
           x += 4 if hasNormal
         else
-          faces.push(data.faces[x])
-          faces.push(data.faces[x+1])
-          faces.push(data.faces[x+2])
-
-          numVertices = 3
-
-          x += numVertices
+          x += 3
           x++ if hasMaterial
-          if hasUv
-            pushUv(faces[0], data.faces[x])
-            pushUv(faces[1], data.faces[x+1])
-            pushUv(faces[2], data.faces[x+2])
-            x += 3
-          x += numVertices if hasNormal
+          x += 3 if hasUv
+          x += 3 if hasNormal
 
         for face in faces
           faceElements.push(face)
