@@ -2,25 +2,33 @@ precision mediump float;
 
 varying vec2 fragmentUv;
 varying vec3 fragmentNormal;
-varying vec4 mvPosition;
+varying vec4 fragmentPosition;
 
 uniform sampler2D textureSampler;
 uniform vec4 lightPosition;
 uniform vec3 ambientColor;
+uniform vec4 cameraPosition;
 
 const vec3 lightDiffuseColor = vec3(1.0, 1.0, 1.0);
 const vec3 lightSpecularColor = vec3(0.4, 0.4, 0.4);
 const float shininess = 5.0;
 
 void main() {
-  vec3 lightDirection = normalize(vec3(lightPosition - mvPosition));
+  vec3 lightDirection = normalize(vec3(lightPosition - fragmentPosition));
   vec3 normal = normalize(fragmentNormal);
 
   // Specular
-  vec3 eyeDirection = normalize(vec3(mvPosition));
-  vec3 reflectionDirection = reflect(lightDirection, normal);
+  vec3 eyeDirection = normalize(vec3(cameraPosition - fragmentPosition));
+  vec3 reflectionDirection = reflect(-lightDirection, normal);
   float specularWeight = pow(max(dot(reflectionDirection, eyeDirection), 0.0), shininess);
-  vec3 specularLight = lightSpecularColor * specularWeight;
+
+  vec3 specularLight;
+
+  if (dot(normal, lightDirection) > 0.0) {
+    specularLight = lightSpecularColor * specularWeight;
+  } else {
+    specularLight = vec3(0.0, 0.0, 0.0);
+  }
 
   // Diffuse
   float diffuseWeight = max(dot(normal, lightDirection), 0.0);

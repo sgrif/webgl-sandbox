@@ -74,8 +74,18 @@ class @Matrix4
       0, 0, 0, 1
     ]))
 
-  normalsFor: (model) ->
-    mat3.normalFromMat4(mat3.create(), @times(model).elements)
+  timesVector: (vector) ->
+    vector = vector.toArray()
+    vectorRow = (i) -> vector[i]
+    result = (multiplyRows(@column(i), vectorRow) for i in [0..3])
+    new Vector4(result...)
+
+  Object.defineProperties @prototype,
+    inverse:
+      get: -> new Matrix4(mat4.invert(mat4.create(), @elements))
+
+    normalMatrix:
+      get: -> mat3.normalFromMat4(mat3.create(), @elements)
 
   @lookingAt: (eye, target, up) ->
     z = eye.minus(target).normalize()
@@ -96,7 +106,7 @@ class @Matrix4
       -eye.x, -eye.y, -eye.z, 1
     ])
 
-    translation.times(rotation)
+    rotation.times(translation)
 
   @perspective: (fovy, aspect, near, far) ->
     fov = 1.0 / Math.tan(fovy / 2)
