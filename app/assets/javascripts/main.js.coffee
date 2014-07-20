@@ -50,9 +50,8 @@
     penumbraAngle: 10
 
   lightGui = gui.addFolder("Light Position")
-  lightGui.add(light.position.rotation, "radius", -Math.PI / 2, Math.PI / 2)
-  lightGui.add(light.position.rotation, "polar", -Math.PI / 2, Math.PI / 2)
-  lightGui.add(light.position.rotation, "azimuth", -Math.PI / 2, Math.PI / 2)
+  lightGui.add(light.position.rotation, "polar", -Math.PI, Math.PI)
+  lightGui.add(light.position.rotation, "azimuth", -Math.PI, Math.PI)
   lightGui.add(light, "spotAngle", 0, 90)
   lightGui.add(light, "penumbraAngle", 0, 90)
 

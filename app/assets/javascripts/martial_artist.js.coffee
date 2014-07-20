@@ -31,7 +31,7 @@
     if request.readyState == 4
       data = JSON.parse(request.responseText)
       attributeData.vertexCoord.elements = new Float32Array(data.vertices)
-      attributeData.vertexUv.elements = new Float32Array(data.uvs[0])
+      attributeData.vertexUv.elements = new Float32Array(0 for uv in data.uvs[0])
       attributeData.vertexNormal.elements = new Float32Array(data.normals)
 
       faceElements = []
@@ -47,20 +47,21 @@
         hasUv = isBitSet(bitMask, 3)
         hasNormal = isBitSet(bitMask, 5)
 
+        faces = []
         if isQuad
-          faceElements.push(data.faces[x])
-          faceElements.push(data.faces[x+1])
-          faceElements.push(data.faces[x+3])
+          faces.push(data.faces[x])
+          faces.push(data.faces[x+1])
+          faces.push(data.faces[x+3])
 
-          faceElements.push(data.faces[x+1])
-          faceElements.push(data.faces[x+2])
-          faceElements.push(data.faces[x+3])
+          faces.push(data.faces[x+1])
+          faces.push(data.faces[x+2])
+          faces.push(data.faces[x+3])
 
           numVertices = 4
         else
-          faceElements.push(data.faces[x])
-          faceElements.push(data.faces[x+1])
-          faceElements.push(data.faces[x+2])
+          faces.push(data.faces[x])
+          faces.push(data.faces[x+1])
+          faces.push(data.faces[x+2])
 
           numVertices = 3
 
@@ -68,6 +69,9 @@
         x++ if hasMaterial
         x += numVertices if hasUv
         x += numVertices if hasNormal
+
+        for face in faces
+          faceElements.push(face)
 
       faceElements = new Uint16Array(faceElements)
 
