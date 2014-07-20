@@ -22,7 +22,7 @@
   camera =
     position: new OrbitalObject3d(
       new Vector3(0, 0, 0)
-      new SphericCoordinate(20, Math.PI / 2 - 0.0872664626, 0)
+      new SphericCoordinate(20, Math.PI / 2, 0)
       2
     )
     perspective:
