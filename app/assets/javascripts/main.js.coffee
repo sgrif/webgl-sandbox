@@ -15,28 +15,21 @@
     ambientLight: ColorUniform.build(gl, program, "ambientColor")
     textureSampler: Uniform.build(gl, program, "textureSampler", "uniform1i")
 
-  drawMoon = setupMoon(gl, program, uniforms.textureSampler)
-  drawCrate = setupCrate(gl, program, uniforms.textureSampler)
+  drawScene = setupTeapot(gl, program, uniforms.textureSampler)
 
   model = new Object3d(position: x: 0, y: 0, z: 0)
   camera =
     position: new OrbitalObject3d(
       new Vector3(0, 0, 0)
-      new SphericCoordinate(20, Math.PI / 2, 0)
-      2
+      new SphericCoordinate(40, Math.PI / 2, 0)
     )
     perspective:
       matrix: Matrix4.perspective(45, canvas.width/canvas.height, 0.1, 100)
 
-  moon = new OrbitalObject3d(
-    new Vector3(0, 0, 0)
-    new SphericCoordinate(5, Math.PI / 2, Math.PI / 2)
-  )
+  degToRad = (degrees) ->
+    degrees * Math.PI / 180
 
-  crate = new OrbitalObject3d(
-    new Vector3(0, 0, 0)
-    new SphericCoordinate(5, Math.PI / 2, -Math.PI / 2)
-  )
+  teapot = new Object3d(rotation: new Vector3(degToRad(23.4), 0, degToRad(-23.4)))
 
   gui = new dat.GUI()
 
@@ -48,7 +41,7 @@
   ambientGui.add(ambient, "b", 0, 1)
 
   light =
-    position: x: -15, y: -6.0, z: -10, w: 1.0
+    position: x: -10, y: 4, z: -20, w: 1
 
   lightGui = gui.addFolder("Light Position")
   lightGui.add(light.position, "x", -30, 30)
@@ -56,14 +49,14 @@
   lightGui.add(light.position, "z", -30, 30)
 
   rotation =
-    radius: 0
-    polar: 0
-    azimuth: 0
+    x: 0
+    y: 0
+    z: 0
 
   rotationGui = gui.addFolder("Model Rotation")
-  rotationGui.add(rotation, "radius", -2 * Math.PI, 2 * Math.PI)
-  rotationGui.add(rotation, "polar", -2 * Math.PI, 2 * Math.PI)
-  rotationGui.add(rotation, "azimuth", -2 * Math.PI, 2 * Math.PI)
+  rotationGui.add(rotation, "x", -2 * Math.PI, 2 * Math.PI)
+  rotationGui.add(rotation, "y", -2 * Math.PI, 2 * Math.PI)
+  rotationGui.add(rotation, "z", -2 * Math.PI, 2 * Math.PI)
 
   runEveryFrame ->
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
@@ -74,16 +67,9 @@
     uniforms.lightPosition.set(gl, light.position)
     uniforms.ambientLight.set(gl, ambient)
 
-    rotatedModel = moon.rotateSpheric(rotation).matrix.times(model.matrix)
+    rotatedModel = teapot.rotate(rotation).matrix.times(model.matrix)
 
     uniforms.m.set(gl, rotatedModel)
     uniforms.normalMatrix.set(gl, camera.position.matrix.normalsFor(rotatedModel))
 
-    drawMoon()
-
-    rotatedModel = crate.rotateSpheric(rotation).matrix.times(model.matrix)
-
-    uniforms.m.set(gl, rotatedModel)
-    uniforms.normalMatrix.set(gl, camera.position.matrix.normalsFor(rotatedModel))
-
-    drawCrate()
+    drawScene()
