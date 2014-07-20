@@ -57,18 +57,19 @@
           faces.push(data.faces[x+2])
           faces.push(data.faces[x+3])
 
-          numVertices = 4
+          x += 4
+          x++ if hasMaterial
+          x += 4 if hasUv
+          x += 4 if hasNormal
         else
           faces.push(data.faces[x])
           faces.push(data.faces[x+1])
           faces.push(data.faces[x+2])
 
-          numVertices = 3
-
-        x += numVertices
-        x++ if hasMaterial
-        x += numVertices if hasUv
-        x += numVertices if hasNormal
+          x += 3
+          x++ if hasMaterial
+          x += 3 if hasUv
+          x += 3 if hasNormal
 
         for face in faces
           faceElements.push(face)
