@@ -30,14 +30,15 @@
   request.onreadystatechange = ->
     if request.readyState == 4
       data = JSON.parse(request.responseText)
-      attributeData.vertexCoord.elements = new Float32Array(data.vertices)
-      attributeData.vertexUv.elements = new Float32Array(data.uvs[0])
-      attributeData.vertexNormal.elements = new Float32Array(data.normals)
 
-      rawUvs = data.uvs[0]
-      uvs = []
+      faces = []
 
-      faceElements = []
+      pushFace = (x, uvOffset, normalOffset) ->
+        faces.push
+          vertex: data.faces[x]
+          uv: data.faces[x + uvOffset]
+          normal: data.faces[x + normalOffset]
+
       x = 0
       faceLength = data.faces.length
       while x < faceLength
@@ -50,29 +51,72 @@
         hasUv = isBitSet(bitMask, 3)
         hasNormal = isBitSet(bitMask, 5)
 
-        faces = []
         if isQuad
-          faces.push(data.faces[x])
-          faces.push(data.faces[x+1])
-          faces.push(data.faces[x+3])
+          uvOffset = 4
+          uvOffset++ if hasMaterial
+          normalOffset = uvOffset + 4
 
-          faces.push(data.faces[x+1])
-          faces.push(data.faces[x+2])
-          faces.push(data.faces[x+3])
+          pushFace(x, uvOffset, normalOffset)
+          pushFace(x+1, uvOffset, normalOffset)
+          pushFace(x+3, uvOffset, normalOffset)
+
+          pushFace(x+1, uvOffset, normalOffset)
+          pushFace(x+2, uvOffset, normalOffset)
+          pushFace(x+3, uvOffset, normalOffset)
 
           x += 4
           x++ if hasMaterial
           x += 4 if hasUv
           x += 4 if hasNormal
         else
+          uvOffset = 3
+          uvOffset++ if hasMaterial
+          normalOffset = uvOffset + 3
+
+          pushFace(x, uvOffset, normalOffset)
+          pushFace(x+1, uvOffset, normalOffset)
+          pushFace(x+2, uvOffset, normalOffset)
+
           x += 3
           x++ if hasMaterial
           x += 3 if hasUv
           x += 3 if hasNormal
 
-        for face in faces
-          faceElements.push(face)
+      faceElements = []
+      vertices = data.vertices
+      uvs = []
+      normals = []
+      vertexUvs = []
 
+      numVertices = data.vertices / 3
+
+      for face in faces
+        unless vertexUvs[face.vertex]?
+          vertexUvs[face.vertex] = face.uv
+
+        if vertexUvs[face.vertex] == face.uv
+          faceElements.push(face.vertex)
+          uvOffset = face.vertex * 2
+          normalOffset = face.vertex * 3
+        else
+          faceElements.push(numVertices)
+          vertices.push(vertices[face.vertex * 3])
+          vertices.push(vertices[face.vertex * 3 + 1])
+          vertices.push(vertices[face.vertex * 3 + 2])
+          uvOffset = numVertices * 2
+          normalOffset = numVertices * 3
+          numVertices++
+
+        uvs[uvOffset] = data.uvs[0][face.uv * 2]
+        uvs[uvOffset + 1] = data.uvs[0][face.uv * 2 + 1]
+        normals[normalOffset] = data.normals[face.normal * 3]
+        normals[normalOffset + 1] = data.normals[face.normal * 3 + 1]
+        normals[normalOffset + 2] = data.normals[face.normal * 3 + 2]
+
+      attributeData.vertexCoord.elements = new Float32Array(vertices)
+      attributeData.vertexUv.elements = new Float32Array(uvs)
+      attributeData.vertexNormal.elements = new Float32Array(normals)
+      console.log(attributeData)
       faceElements = new Uint16Array(faceElements)
 
   request.send()
