@@ -15,7 +15,7 @@ class @Texture
   processImage: (gl) -> =>
     gl.bindTexture(gl.TEXTURE_2D, @texture)
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, @flipY)
-    @_sendData(gl)
+    @_sendImageData(gl)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl[@magFilter])
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl[@minFilter])
     gl.generateMipmap(gl.TEXTURE_2D) if @generateMipmap
@@ -27,5 +27,5 @@ class @Texture
     gl.bindTexture(gl.TEXTURE_2D, @texture)
     @uniform.set(gl, @index)
 
-  _sendData: (gl) ->
+  _sendImageData: (gl) ->
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, @image)

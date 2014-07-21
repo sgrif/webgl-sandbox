@@ -19,6 +19,7 @@ class @DataTexture extends Texture
     @uniforms.height.set(gl, @image.height)
 
   _sendImageData: (gl) ->
+    gl.getExtension("OES_texture_float")
     gl.texImage2D(
       gl.TEXTURE_2D
       0

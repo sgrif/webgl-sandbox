@@ -61,7 +61,7 @@
         width: uniforms.boneTextureWidth
         height: uniforms.boneTextureHeight
       boneTexture = skeleton.createTexture(boneUniforms, 3)
-      window.boneTexture = boneTexture
+      boneTexture.load(gl)
 
       faces = []
 
