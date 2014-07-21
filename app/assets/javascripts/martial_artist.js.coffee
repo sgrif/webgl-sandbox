@@ -8,6 +8,9 @@
     vertexUv: VertexAttribute.build(gl, program, "vertexUv")
     vertexNormal: VertexAttribute.build(gl, program, "vertexNormal")
 
+  uniforms =
+    bones: gl.getUniformLocation(program, "bones")
+
   buffers =
     faceElements: Buffer.create(gl.ELEMENT_ARRAY_BUFFER, gl)
     vertexCoord: Buffer.create(gl.ARRAY_BUFFER, gl)
@@ -141,6 +144,8 @@
 
       buffers.faceElements.bind(gl)
       buffers.faceElements.data(gl, faceElements)
+
+      gl.uniformMatrix4fv(uniforms.bones, false, skeleton.skinMatrices)
 
       buffers.faceElements.bind(gl)
       gl.drawElements(gl.TRIANGLES, faceElements.length, gl.UNSIGNED_SHORT, 0)
