@@ -16,7 +16,7 @@ uniform int boneTextureWidth;
 uniform int boneTextureHeight;
 
 mat4 getBoneMatrix(const in float i) {
-  float j = i * 4.0;
+  float j = floor(i) * 4.0;
   float x = mod(j, float(boneTextureWidth));
   float y = floor(j / float(boneTextureWidth));
 
