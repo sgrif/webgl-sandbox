@@ -88,7 +88,7 @@
       normals = []
       vertexUvs = []
 
-      numVertices = data.vertices / 3
+      numVertices = data.vertices.length / 3
 
       for face in faces
         unless vertexUvs[face.vertex]?
