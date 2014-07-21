@@ -41,6 +41,7 @@
 
   faceElements = null
   skeleton = null
+  animation = null
 
   diffuseTexture = new Texture("/HOM_Character_D_Red.png", diffuseTextureSampler, 0)
   diffuseTexture.load(gl)
@@ -62,6 +63,7 @@
         height: uniforms.boneTextureHeight
       boneTexture = skeleton.createTexture(boneUniforms, 3)
       boneTexture.load(gl)
+      animation = new AnimationBuilder(data.animations[0]).build()
 
       faces = []
 
