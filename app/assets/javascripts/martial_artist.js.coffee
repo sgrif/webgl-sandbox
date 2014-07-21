@@ -7,6 +7,8 @@
     vertexCoord: VertexAttribute.build(gl, program, "vertexCoord")
     vertexUv: VertexAttribute.build(gl, program, "vertexUv")
     vertexNormal: VertexAttribute.build(gl, program, "vertexNormal")
+    vertexSkinWeights: VertexAttribute.build(gl, program, "vertexSkinWeights")
+    vertexSkinIndices: VertexAttribute.build(gl, program, "vertexSkinIndices")
 
   uniforms =
     bones: gl.getUniformLocation(program, "bones")
@@ -16,6 +18,8 @@
     vertexCoord: Buffer.create(gl.ARRAY_BUFFER, gl)
     vertexUv: Buffer.create(gl.ARRAY_BUFFER, gl)
     vertexNormal: Buffer.create(gl.ARRAY_BUFFER, gl)
+    vertexSkinWeights: Buffer.create(gl.ARRAY_BUFFER, gl)
+    vertexSkinIndices: Buffer.create(gl.ARRAY_BUFFER, gl)
 
   attributeData =
     vertexCoord:
@@ -26,6 +30,12 @@
 
     vertexNormal:
       elementsPerItem: 3
+
+    vertexSkinWeights:
+      elementsPerItem: 4
+
+    vertexSkinIndices:
+      elementsPerItem: 4
 
   faceElements = null
   skeleton = null
@@ -97,6 +107,8 @@
 
       faceElements = []
       vertices = data.vertices
+      skinWeights = data.skinWeights
+      skinIndices = data.skinIndices
       uvs = []
       normals = []
       vertexUvs = []
@@ -116,6 +128,17 @@
           vertices.push(vertices[face.vertex * 3])
           vertices.push(vertices[face.vertex * 3 + 1])
           vertices.push(vertices[face.vertex * 3 + 2])
+
+          skinIndices.push(skinWeights[face.vertex * 4])
+          skinIndices.push(skinWeights[face.vertex * 4 + 1])
+          skinIndices.push(skinWeights[face.vertex * 4 + 2])
+          skinIndices.push(skinWeights[face.vertex * 4 + 3])
+
+          skinWeights.push(skinWeights[face.vertex * 4])
+          skinWeights.push(skinWeights[face.vertex * 4 + 1])
+          skinWeights.push(skinWeights[face.vertex * 4 + 2])
+          skinWeights.push(skinWeights[face.vertex * 4 + 3])
+
           uvOffset = numVertices * 2
           normalOffset = numVertices * 3
           numVertices++
@@ -129,6 +152,9 @@
       attributeData.vertexCoord.elements = new Float32Array(vertices)
       attributeData.vertexUv.elements = new Float32Array(uvs)
       attributeData.vertexNormal.elements = new Float32Array(normals)
+      attributeData.vertexSkinWeights.elements = new Float32Array(skinWeights)
+      attributeData.vertexSkinIndices.elements = new Float32Array(skinIndices)
+
       faceElements = new Uint16Array(faceElements)
 
   request.send()
@@ -139,13 +165,13 @@
       specularTexture.render(gl)
       normalMap.render(gl)
 
+      gl.uniformMatrix4fv(uniforms.bones, false, skeleton.skinMatrices)
+
       for name, attribute of attributes
         attribute.populate(gl, buffers[name], attributeData[name])
 
       buffers.faceElements.bind(gl)
       buffers.faceElements.data(gl, faceElements)
-
-      gl.uniformMatrix4fv(uniforms.bones, false, skeleton.skinMatrices)
 
       buffers.faceElements.bind(gl)
       gl.drawElements(gl.TRIANGLES, faceElements.length, gl.UNSIGNED_SHORT, 0)

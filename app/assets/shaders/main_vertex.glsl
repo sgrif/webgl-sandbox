@@ -1,6 +1,8 @@
 attribute vec3 vertexCoord;
 attribute vec2 vertexUv;
 attribute vec3 vertexNormal;
+attribute vec4 vertexSkinWeights;
+attribute vec4 vertexSkinIndices;
 
 varying vec2 fragmentUv;
 varying vec3 fragmentNormal;
@@ -12,6 +14,7 @@ uniform mat3 normalMatrix;
 uniform mat4 bones[154];
 
 void main() {
+  vec4 wibble = vertexSkinWeights * vertexSkinIndices;
   fragmentPosition = m * vec4(vertexCoord, 1);
   gl_Position = p * v * fragmentPosition;
   fragmentUv = vertexUv;
