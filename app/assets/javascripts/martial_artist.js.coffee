@@ -11,7 +11,9 @@
     vertexSkinIndices: VertexAttribute.build(gl, program, "vertexSkinIndices")
 
   uniforms =
-    bones: gl.getUniformLocation(program, "bones")
+    bones: Uniform.build(gl, program, "bones", "uniform1i")
+    boneTextureWidth: Uniform.build(gl, program, "boneTextureWidth", "uniform1i")
+    boneTextureHeight: Uniform.build(gl, program, "boneTextureHeight", "uniform1i")
 
   buffers =
     faceElements: Buffer.create(gl.ELEMENT_ARRAY_BUFFER, gl)
@@ -46,6 +48,7 @@
   specularTexture.load(gl)
   normalMap = new Texture("/HOM_Character_N.png", normalMapSampler, 2)
   normalMap.load(gl)
+  boneTexture = null
 
   request = new XMLHttpRequest
   request.open("GET", "/person.json")
@@ -53,6 +56,12 @@
     if request.readyState == 4
       data = JSON.parse(request.responseText)
       skeleton = new SkeletonBuilder(data.bones).build()
+      boneUniforms =
+        image: uniforms.bones
+        width: uniforms.boneTextureWidth
+        height: uniforms.boneTextureHeight
+      boneTexture = skeleton.createTexture(boneUniforms, 3)
+      window.boneTexture = boneTexture
 
       faces = []
 
@@ -164,8 +173,7 @@
       diffuseTexture.render(gl)
       specularTexture.render(gl)
       normalMap.render(gl)
-
-      gl.uniformMatrix4fv(uniforms.bones, false, skeleton.skinMatrices)
+      boneTexture.render(gl)
 
       for name, attribute of attributes
         attribute.populate(gl, buffers[name], attributeData[name])
