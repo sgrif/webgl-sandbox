@@ -16,9 +16,10 @@
     ambientLight: ColorUniform.build(gl, program, "ambientColor")
     spotAngle: Uniform.build(gl, program, "spotAngle", "uniform1f")
     penumbraAngle: Uniform.build(gl, program, "penumbraAngle", "uniform1f")
-    textureSampler: Uniform.build(gl, program, "textureSampler", "uniform1i")
+    diffuseTexture: Uniform.build(gl, program, "diffuseTexture", "uniform1i")
+    specularTexture: Uniform.build(gl, program, "specularTexture", "uniform1i")
 
-  drawScene = setupMartialArtist(gl, program, uniforms.textureSampler)
+  drawScene = setupMartialArtist(gl, program, uniforms)
 
   model = new Object3d(position: { x: 0, y: 0, z: 0 })
   camera = new Camera

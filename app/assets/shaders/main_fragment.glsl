@@ -4,8 +4,10 @@ varying vec2 fragmentUv;
 varying vec3 fragmentNormal;
 varying vec4 fragmentPosition;
 
-uniform sampler2D textureSampler;
+uniform sampler2D diffuseTexture;
+uniform sampler2D specularTexture;
 uniform vec4 lightPosition;
+uniform vec3 lightAngle;
 uniform vec3 ambientColor;
 uniform vec4 cameraPosition;
 uniform float spotAngle;
@@ -43,6 +45,8 @@ void main() {
   vec3 diffuseLight = ambientColor
     + lightDiffuseColor * diffuseWeight;
 
-  vec4 textureColor = texture2D(textureSampler, vec2(fragmentUv.s, fragmentUv.t));
-  gl_FragColor = textureColor * vec4(diffuseLight, 1.0) + vec4(specularLight, 1.0);
+  vec4 materialDiffuseColor = texture2D(diffuseTexture, vec2(fragmentUv.s, fragmentUv.t));
+  vec4 materialSpecularColor = texture2D(specularTexture, vec2(fragmentUv.s, fragmentUv.t));
+  gl_FragColor = materialDiffuseColor * vec4(diffuseLight, 1.0)
+    + materialSpecularColor * vec4(specularLight, 1.0);
 }

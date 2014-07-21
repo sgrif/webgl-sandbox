@@ -92,21 +92,12 @@ class @Matrix4
     x = up.cross(z).normalize()
     y = z.cross(x)
 
-    rotation = new Matrix4([
+    new Matrix4([
       x.x, y.x, z.x, 0
       x.y, y.y, z.y, 0
       x.z, y.z, z.z, 0
       0, 0, 0, 1
-    ])
-
-    translation = new Matrix4([
-      1, 0, 0, 0
-      0, 1, 0, 0
-      0, 0, 1, 0
-      -eye.x, -eye.y, -eye.z, 1
-    ])
-
-    rotation.times(translation)
+    ]).translate(eye.multiplyScalar(-1))
 
   @perspective: (fovy, aspect, near, far) ->
     fov = 1.0 / Math.tan(fovy / 2)

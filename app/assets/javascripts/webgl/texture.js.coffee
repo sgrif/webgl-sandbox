@@ -1,5 +1,5 @@
 class @Texture
-  constructor: (@src, @uniform) ->
+  constructor: (@src, @uniform, @index = 0) ->
     @loaded = false
 
   load: (gl) ->
@@ -19,6 +19,6 @@ class @Texture
     @loaded = true
 
   render: (gl) ->
-    gl.activeTexture(gl.TEXTURE0)
+    gl.activeTexture(gl["TEXTURE#{@index}"])
     gl.bindTexture(gl.TEXTURE_2D, @texture)
-    @uniform.set(gl, 0)
+    @uniform.set(gl, @index)
