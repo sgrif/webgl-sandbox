@@ -116,7 +116,6 @@
       attributeData.vertexCoord.elements = new Float32Array(vertices)
       attributeData.vertexUv.elements = new Float32Array(uvs)
       attributeData.vertexNormal.elements = new Float32Array(normals)
-      console.log(attributeData)
       faceElements = new Uint16Array(faceElements)
 
   request.send()

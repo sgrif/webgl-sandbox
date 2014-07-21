@@ -43,8 +43,8 @@
 
   light =
     position: new OrbitalObject3d(
-      new Vector3(0, 0, 0)
-      new SphericCoordinate(400, Math.PI / 2, 0)
+      new Vector3(0, 75, 0)
+      new SphericCoordinate(100, Math.PI / 2, 0)
     )
     spotAngle: 55
     penumbraAngle: 10
