@@ -1,0 +1,2 @@
+class @Skeleton
+  constructor: (@joints) ->

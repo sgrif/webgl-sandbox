@@ -25,6 +25,7 @@
       elementsPerItem: 3
 
   faceElements = null
+  skeleton = null
 
   diffuseTexture = new Texture("/HOM_Character_D_Red.png", diffuseTextureSampler, 0)
   diffuseTexture.load(gl)
@@ -38,6 +39,7 @@
   request.onreadystatechange = ->
     if request.readyState == 4
       data = JSON.parse(request.responseText)
+      skeleton = new SkeletonBuilder(data.bones).build()
 
       faces = []
 
