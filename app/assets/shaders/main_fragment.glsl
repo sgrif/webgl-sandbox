@@ -20,7 +20,8 @@ const float shininess = 5.0;
 
 void main() {
   vec3 lightDirection = normalize(vec3(lightPosition - fragmentPosition));
-  vec3 normal = normalize(fragmentNormal);
+  vec4 normalMapping = texture2D(normalMap, vec2(fragmentUv.s, fragmentUv.t));
+  vec3 normal = normalize(fragmentNormal) * (normalMapping.rgb * 2.0 - 1.0);
 
   float attenuation;
   float currentAngle = max(0.0, dot(lightDirection, vec3(0.0, 0.0, 1.0)));
