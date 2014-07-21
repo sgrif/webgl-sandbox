@@ -18,6 +18,7 @@
     penumbraAngle: Uniform.build(gl, program, "penumbraAngle", "uniform1f")
     diffuseTexture: Uniform.build(gl, program, "diffuseTexture", "uniform1i")
     specularTexture: Uniform.build(gl, program, "specularTexture", "uniform1i")
+    normalMap: Uniform.build(gl, program, "normalMap", "uniform1i")
 
   drawScene = setupMartialArtist(gl, program, uniforms)
 

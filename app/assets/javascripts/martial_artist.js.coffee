@@ -1,6 +1,7 @@
 @setupMartialArtist = (gl, program, uniforms) ->
   diffuseTextureSampler = uniforms.diffuseTexture
   specularTextureSampler = uniforms.specularTexture
+  normalMapSampler = uniforms.normalMap
 
   attributes =
     vertexCoord: VertexAttribute.build(gl, program, "vertexCoord")
@@ -29,6 +30,8 @@
   diffuseTexture.load(gl)
   specularTexture = new Texture("/HOM_Character_S.png", specularTextureSampler, 1)
   specularTexture.load(gl)
+  normalMap = new Texture("/HOM_Character_N.png", normalMapSampler, 2)
+  normalMap.load(gl)
 
   request = new XMLHttpRequest
   request.open("GET", "/person.json")
@@ -126,9 +129,10 @@
   request.send()
 
   ->
-    if diffuseTexture.loaded && specularTexture.loaded && faceElements?
+    if diffuseTexture.loaded && specularTexture.loaded && normalMap.loaded && faceElements?
       diffuseTexture.render(gl)
       specularTexture.render(gl)
+      normalMap.render(gl)
 
       for name, attribute of attributes
         attribute.populate(gl, buffers[name], attributeData[name])

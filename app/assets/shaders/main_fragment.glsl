@@ -6,6 +6,7 @@ varying vec4 fragmentPosition;
 
 uniform sampler2D diffuseTexture;
 uniform sampler2D specularTexture;
+uniform sampler2D normalMap;
 uniform vec4 lightPosition;
 uniform vec3 lightAngle;
 uniform vec3 ambientColor;
