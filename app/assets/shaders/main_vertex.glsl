@@ -14,27 +14,26 @@ uniform mat3 normalMatrix;
 uniform mat4 bones[154];
 
 void main() {
-  vec4 skinnedVertex;
-  vec4 skinnedNormal;
+  vec4 skinnedVertex = vec4(0.0);
+  vec4 skinnedNormal = vec4(0.0);
 
   vec4 vertex = vec4(vertexCoord, 1.0);
   vec4 normal = vec4(vertexNormal, 0.0);
 
-  int index = int(vertexSkinIndices.x);
-  skinnedVertex = bones[index] * vertex * vertexSkinWeights.x;
-  skinnedNormal = bones[index] * normal * vertexSkinWeights.x;
+  mat4 boneMatX = bones[int(vertexSkinIndices.x)];
+  mat4 boneMatY = bones[int(vertexSkinIndices.y)];
+  mat4 boneMatZ = bones[int(vertexSkinIndices.z)];
+  mat4 boneMatW = bones[int(vertexSkinIndices.w)];
 
-  index = int(vertexSkinIndices.y);
-  skinnedVertex += bones[index] * vertex * vertexSkinWeights.y;
-  skinnedNormal += bones[index] * normal * vertexSkinWeights.y;
+  skinnedVertex += boneMatX * vertex * vertexSkinWeights.x;
+  skinnedVertex += boneMatY * vertex * vertexSkinWeights.y;
+  skinnedVertex += boneMatZ * vertex * vertexSkinWeights.z;
+  skinnedVertex += boneMatW * vertex * vertexSkinWeights.w;
 
-  index = int(vertexSkinIndices.z);
-  skinnedVertex += bones[index] * vertex * vertexSkinWeights.z;
-  skinnedNormal += bones[index] * normal * vertexSkinWeights.z;
-
-  index = int(vertexSkinIndices.w);
-  skinnedVertex += bones[index] * vertex * vertexSkinWeights.w;
-  skinnedNormal += bones[index] * normal * vertexSkinWeights.w;
+  skinnedNormal += boneMatX * normal * vertexSkinWeights.x;
+  skinnedNormal += boneMatY * normal * vertexSkinWeights.y;
+  skinnedNormal += boneMatZ * normal * vertexSkinWeights.z;
+  skinnedNormal += boneMatW * normal * vertexSkinWeights.w;
 
   fragmentPosition = m * skinnedVertex;
   gl_Position = p * v * fragmentPosition;
