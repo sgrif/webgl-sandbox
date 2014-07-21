@@ -1,6 +1,6 @@
 @main = ->
   canvas = document.getElementById("canvas")
-  gl = canvas.getContext("webgl")
+  gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
   gl.clearColor(0, 0, 0, 1)
 
   program = createProgramWithShaders(gl, "main_vertex", "main_fragment")
