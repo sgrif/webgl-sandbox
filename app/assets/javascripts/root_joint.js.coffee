@@ -4,5 +4,8 @@ class @RootJoint extends Joint
   constructor: (@name, @rotation, @translation) ->
 
   Object.defineProperties @prototype,
-    transformationMatrix:
-      get: -> @relativeMatrix
+    absoluteTransformationMatrix:
+      get: -> @relativeTransformationMatrix
+
+    absoluteBindPoseMatrix:
+      get: -> @relativeBindPoseMatrix

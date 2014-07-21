@@ -57,13 +57,19 @@
     if request.readyState == 4
       data = JSON.parse(request.responseText)
       skeleton = new SkeletonBuilder(data.bones).build()
+      animation = new AnimationBuilder(data.animations[0]).build()
+      window.skeleton = skeleton
+      window.animation = animation
+
+      for joint, i in skeleton.joints
+        joint.relativeTransformationMatrix = animation.hierarchy[i][0]
+
       boneUniforms =
         image: uniforms.bones
         width: uniforms.boneTextureWidth
         height: uniforms.boneTextureHeight
       boneTexture = skeleton.createTexture(boneUniforms, 3)
       boneTexture.load(gl)
-      animation = new AnimationBuilder(data.animations[0]).build()
 
       faces = []
 

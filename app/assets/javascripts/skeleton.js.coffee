@@ -15,8 +15,9 @@ class @Skeleton
         unless @_matrix?
           @_matrix = new Float32Array(@boneTextureWidth * @boneTextureHeight * 4)
           for joint, i in @joints
-            bindPose = joint.transformationMatrix
-            skinMatrix = bindPose.times(bindPose.inverse)
+            transformation = joint.absoluteTransformationMatrix
+            bindPose = joint.absoluteBindPoseMatrix
+            skinMatrix = transformation.times(bindPose.inverse)
 
             for x, i2 in skinMatrix.elements
               @_matrix[i2 + i * 16] = x

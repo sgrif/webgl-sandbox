@@ -2,10 +2,21 @@ class @Joint
   constructor: (@name, @parent, @rotation, @translation) ->
 
   Object.defineProperties @prototype,
-    transformationMatrix:
+    absoluteTransformationMatrix:
       get: ->
-        @parent.transformationMatrix.times(@relativeMatrix)
+        @parent.absoluteTransformationMatrix.times(@relativeTransformationMatrix)
 
-    relativeMatrix:
+    relativeTransformationMatrix:
+      get: ->
+        @_relativeTransformationMatrix ?= @relativeBindPoseMatrix
+
+      set: (newMatrix) ->
+        @_relativeTransformationMatrix = newMatrix
+
+    absoluteBindPoseMatrix:
+      get: ->
+        @parent.absoluteBindPoseMatrix.times(@relativeBindPoseMatrix)
+
+    relativeBindPoseMatrix:
       get: ->
         @rotation.toMatrix().translate(@translation)
