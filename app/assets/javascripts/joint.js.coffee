@@ -19,4 +19,4 @@ class @Joint
 
     relativeBindPoseMatrix:
       get: ->
-        @rotation.toMatrix().translate(@translation)
+        @_relativeBindPoseMatrix ?= @rotation.toMatrix().withPosition(@translation)

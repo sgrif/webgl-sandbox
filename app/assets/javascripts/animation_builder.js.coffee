@@ -11,7 +11,8 @@ class @AnimationBuilder
     _.map(keys, @_parseFrame, this)
 
   _parseFrame: ({ scl, rot, pos }) ->
-    new Matrix4()
-      .translate(new Vector3(pos...))
-      .times(new Quaternion(rot...).toMatrix())
-      .scale(new Vector3(scl...))
+    Matrix4.composedOf(
+      new Vector3(pos...)
+      new Quaternion(rot...)
+      new Vector3(scl...)
+    )

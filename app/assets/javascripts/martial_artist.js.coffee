@@ -146,10 +146,10 @@
           vertices.push(vertices[face.vertex * 3 + 1])
           vertices.push(vertices[face.vertex * 3 + 2])
 
-          skinIndices.push(skinWeights[face.vertex * 4])
-          skinIndices.push(skinWeights[face.vertex * 4 + 1])
-          skinIndices.push(skinWeights[face.vertex * 4 + 2])
-          skinIndices.push(skinWeights[face.vertex * 4 + 3])
+          skinIndices.push(skinIndices[face.vertex * 4])
+          skinIndices.push(skinIndices[face.vertex * 4 + 1])
+          skinIndices.push(skinIndices[face.vertex * 4 + 2])
+          skinIndices.push(skinIndices[face.vertex * 4 + 3])
 
           skinWeights.push(skinWeights[face.vertex * 4])
           skinWeights.push(skinWeights[face.vertex * 4 + 1])

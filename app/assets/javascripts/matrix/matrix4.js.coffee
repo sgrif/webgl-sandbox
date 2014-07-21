@@ -87,6 +87,14 @@ class @Matrix4
     normalMatrix:
       get: -> mat3.normalFromMat4(mat3.create(), @elements)
 
+  withPosition: ({ x, y, z }) ->
+    new Matrix4([
+      unwrap(@row(0))...
+      unwrap(@row(1))...
+      unwrap(@row(2))...
+      x, y, z, @at(3, 3)
+    ])
+
   @lookingAt: (eye, target, up) ->
     z = eye.minus(target).normalize()
     x = up.cross(z).normalize()
@@ -109,3 +117,8 @@ class @Matrix4
       0, 0, (far + near) * nearFar, -1
       0, 0, (2 * far * near) * nearFar, 0
     ])
+
+  @composedOf: (position, quaternion, scale) ->
+    quaternion.toMatrix()
+      .scale(scale)
+      .withPosition(position)

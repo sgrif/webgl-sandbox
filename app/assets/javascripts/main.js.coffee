@@ -36,7 +36,7 @@
 
   gui = new dat.GUI()
 
-  ambient = r: 0.1, g: 0.1, b: 0.1
+  ambient = r: 1, g: 1, b: 1
 
   ambientGui = gui.addFolder("Ambient Light")
   ambientGui.add(ambient, "r", 0, 1)
