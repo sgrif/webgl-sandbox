@@ -59,25 +59,25 @@
     {
       position: new Vector3(0, 368.143481165, 360)
       direction: new Vector3(0, 0.8660254037844197, 0.5)
-      spotAngle: 70
+      spotAngle: 45
       penumbraAngle: 10
     }
     {
       position: new Vector3(0, 368.143481165, -360)
       direction: new Vector3(0, 0.8660254037844197, -0.5)
-      spotAngle: 70
+      spotAngle: 45
       penumbraAngle: 10
     }
     {
       position: new Vector3(360, 368.143481165, 3.10862446895e-14)
       direction: new Vector3(0.5, 0.8660254037844197, 0)
-      spotAngle: 70
+      spotAngle: 45
       penumbraAngle: 10
     }
     {
       position: new Vector3(-360, 368.143481165, 3.10862446895e-14)
       direction: new Vector3(-0.5, 0.8660254037844197, 0)
-      spotAngle: 70
+      spotAngle: 45
       penumbraAngle: 10
     }
   ]
@@ -112,7 +112,7 @@
     drawScene()
 
     gl.useProgram(floorProgram)
-    rotatedModel = model.matrix.rotateX(Math.PI / 2).rotateY(Math.PI)
+    rotatedModel = model.matrix.rotateX(-Math.PI / 2)
 
     uniformSets.floor.m.set(gl, rotatedModel)
     uniformSets.floor.v.set(gl, camera.position.matrix)

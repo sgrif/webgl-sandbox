@@ -16,13 +16,13 @@ uniform vec3 lightDirections[maxSpotLights];
 uniform float spotAngles[maxSpotLights];
 uniform float penumbraAngles[maxSpotLights];
 
-const vec3 lightDiffuseColor = vec3(1.0, 1.0, 1.0);
+const vec3 lightDiffuseColor = vec3(0.5, 0.5, 0.5);
 const vec3 lightSpecularColor = vec3(0.4, 0.4, 0.4);
-const float shininess = 5.0;
+const float shininess = 20.0;
 
 void main() {
   vec4 normalMapping = texture2D(normalMap, vec2(fragmentUv.s, fragmentUv.t));
-  vec3 normal = normalize(fragmentNormal) * (normalMapping.rgb * 2.0 - 1.0);
+  vec3 normal = normalize(fragmentNormal);
   vec3 eyeDirection = normalize(vec3(cameraPosition - fragmentPosition));
 
   vec3 diffuseLight = ambientColor;
