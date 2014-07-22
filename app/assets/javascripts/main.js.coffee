@@ -12,11 +12,11 @@
     p: Matrix4Uniform.build(gl, program, "p")
     cameraPosition: Vector4Uniform.build(gl, program, "cameraPosition")
     normalMatrix: Matrix3Uniform.build(gl, program, "normalMatrix")
-    lightPosition: Vector4Uniform.build(gl, program, "lightPosition")
-    lightDirection: Vector3Uniform.build(gl, program, "lightDirection")
     ambientLight: ColorUniform.build(gl, program, "ambientColor")
-    spotAngle: Uniform.build(gl, program, "spotAngle", "uniform1f")
-    penumbraAngle: Uniform.build(gl, program, "penumbraAngle", "uniform1f")
+    lightPositions: Vector3ArrayUniform.build(gl, program, "lightPositions")
+    lightDirections: Vector3ArrayUniform.build(gl, program, "lightDirections")
+    spotAngles: Uniform.build(gl, program, "spotAngles", "uniform1fv")
+    penumbraAngles: Uniform.build(gl, program, "penumbraAngles", "uniform1fv")
     diffuseTexture: Uniform.build(gl, program, "diffuseTexture", "uniform1i")
     specularTexture: Uniform.build(gl, program, "specularTexture", "uniform1i")
     normalMap: Uniform.build(gl, program, "normalMap", "uniform1i")
@@ -37,32 +37,34 @@
 
   gui = new dat.GUI()
 
-  ambient = r: 0.1, g: 0.1, b: 0.1
+  ambient = r: 0, g: 0, b: 0
 
-  ambientGui = gui.addFolder("Ambient Light")
-  ambientGui.add(ambient, "r", 0, 1)
-  ambientGui.add(ambient, "g", 0, 1)
-  ambientGui.add(ambient, "b", 0, 1)
-
-  light =
-    position: new Vector3(0, 368.143481165, 360)
-    direction: new Vector3(0, 0.8660254037844197, 0.5)
-    spotAngle: 70
-    penumbraAngle: 10
-
-  lightGui = gui.addFolder("Light Position")
-  lightGui.add(light, "spotAngle", 0, 90)
-  lightGui.add(light, "penumbraAngle", 0, 90)
-
-  rotation =
-    x: 0
-    y: 0
-    z: 0
-
-  rotationGui = gui.addFolder("Model Rotation")
-  rotationGui.add(rotation, "x", -2 * Math.PI, 2 * Math.PI)
-  rotationGui.add(rotation, "y", -2 * Math.PI, 2 * Math.PI)
-  rotationGui.add(rotation, "z", -2 * Math.PI, 2 * Math.PI)
+  lights = [
+    {
+      position: new Vector3(0, 368.143481165, 360)
+      direction: new Vector3(0, 0.8660254037844197, 0.5)
+      spotAngle: 70
+      penumbraAngle: 10
+    }
+    {
+      position: new Vector3(0, 368.143481165, -360)
+      direction: new Vector3(0, 0.8660254037844197, -0.5)
+      spotAngle: 70
+      penumbraAngle: 10
+    }
+    {
+      position: new Vector3(360, 368.143481165, 3.10862446895e-14)
+      direction: new Vector3(0.5, 0.8660254037844197, 0)
+      spotAngle: 70
+      penumbraAngle: 10
+    }
+    {
+      position: new Vector3(-360, 368.143481165, 3.10862446895e-14)
+      direction: new Vector3(-0.5, 0.8660254037844197, 0)
+      spotAngle: 70
+      penumbraAngle: 10
+    }
+  ]
 
   cameraGui = gui.addFolder("Camera Position")
   cameraGui.add(camera.position.center, "x", -600, 600)
@@ -81,15 +83,13 @@
     uniforms.v.set(gl, camera.position.matrix)
     uniforms.p.set(gl, camera.perspective.matrix)
     uniforms.cameraPosition.set(gl, camera.worldPosition)
-    uniforms.lightPosition.set(gl, light.position)
-    uniforms.lightDirection.set(gl, light.direction)
     uniforms.ambientLight.set(gl, ambient)
-    uniforms.spotAngle.set(gl, light.spotAngle)
-    uniforms.penumbraAngle.set(gl, light.penumbraAngle)
+    uniforms.lightPositions.set(gl, _.pluck(lights, 'position'))
+    uniforms.lightDirections.set(gl, _.pluck(lights, 'direction'))
+    uniforms.spotAngles.set(gl, new Float32Array(_.pluck(lights, 'spotAngle')))
+    uniforms.penumbraAngles.set(gl, new Float32Array(_.pluck(lights, 'penumbraAngle')))
 
-    rotatedModel = model.rotate(rotation).matrix
-
-    uniforms.m.set(gl, rotatedModel)
-    uniforms.normalMatrix.set(gl, rotatedModel.normalMatrix)
+    uniforms.m.set(gl, model.matrix)
+    uniforms.normalMatrix.set(gl, model.matrix.normalMatrix)
 
     drawScene()
