@@ -4,7 +4,8 @@ class @Joint
   Object.defineProperties @prototype,
     absoluteTransformationMatrix:
       get: ->
-        @parent.absoluteTransformationMatrix.times(@relativeTransformationMatrix)
+        @_absoluteTransformationMatrix ?=
+          @parent.absoluteTransformationMatrix.times(@relativeTransformationMatrix)
 
     relativeTransformationMatrix:
       get: ->
@@ -12,10 +13,11 @@ class @Joint
 
       set: (newMatrix) ->
         @_relativeTransformationMatrix = newMatrix
+        @_absoluteTransformationMatrix = undefined
 
     absoluteBindPoseMatrix:
       get: ->
-        @parent.absoluteBindPoseMatrix.times(@relativeBindPoseMatrix)
+        @_absoluteBindPoseMatrix ?= @parent.absoluteBindPoseMatrix.times(@relativeBindPoseMatrix)
 
     relativeBindPoseMatrix:
       get: ->
