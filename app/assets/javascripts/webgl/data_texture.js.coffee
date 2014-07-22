@@ -14,6 +14,7 @@ class @DataTexture extends Texture
   render: (gl) ->
     gl.activeTexture(gl["TEXTURE#{@index}"])
     gl.bindTexture(gl.TEXTURE_2D, @texture)
+    @_sendImageData(gl)
     @uniforms.image.set(gl, @index)
     @uniforms.width.set(gl, @image.width)
     @uniforms.height.set(gl, @image.height)

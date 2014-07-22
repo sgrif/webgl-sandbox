@@ -41,7 +41,8 @@
 
   faceElements = null
   skeleton = null
-  animation = null
+  animator = null
+  boneTexture = null
 
   diffuseTexture = new Texture("/HOM_Character_D_Red.png", diffuseTextureSampler, 0)
   diffuseTexture.load(gl)
@@ -49,7 +50,6 @@
   specularTexture.load(gl)
   normalMap = new Texture("/HOM_Character_N.png", normalMapSampler, 2)
   normalMap.load(gl)
-  boneTexture = null
 
   request = new XMLHttpRequest
   request.open("GET", "/person.json")
@@ -58,14 +58,8 @@
       data = JSON.parse(request.responseText)
       skeleton = new SkeletonBuilder(data.bones).build()
       animation = new AnimationBuilder(data.animations[0]).build()
-
-      for joint, i in skeleton.joints
-        keyframe = animation.hierarchy[i][0]
-        joint.relativeTransformationMatrix = Matrix4.composedOf(
-          keyframe.translation
-          keyframe.rotation
-          keyframe.scale
-        )
+      animator = new SkeletalAnimator(skeleton, animation)
+      animator.setTime(0)
 
       boneUniforms =
         image: uniforms.bones
@@ -179,11 +173,12 @@
 
   request.send()
 
-  ->
+  (delta) ->
     if diffuseTexture.loaded && specularTexture.loaded && normalMap.loaded && faceElements?
       diffuseTexture.render(gl)
       specularTexture.render(gl)
       normalMap.render(gl)
+      boneTexture.image.data = skeleton.skinMatrices
       boneTexture.render(gl)
 
       for name, attribute of attributes

@@ -2,6 +2,10 @@ class @Skeleton
   constructor: (@joints) ->
     @boneTextureWidth = @boneTextureHeight = 32
 
+  applyTransformations: (transformations) ->
+    for joint, i in @joints
+      joint.relativeTransformationMatrix = transformations[i]
+
   createTexture: (uniforms, index) ->
     image =
       data: @skinMatrices

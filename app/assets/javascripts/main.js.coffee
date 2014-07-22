@@ -89,7 +89,11 @@
   cameraGui.add(camera.position.rotation, "polar", -2 * Math.PI, 2 * Math.PI)
   cameraGui.add(camera.position.rotation, "azimuth", -2 * Math.PI, 2 * Math.PI)
 
+  clock = new Clock()
+  clock.start()
+
   runEveryFrame ->
+    delta = clock.getDelta()
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
     gl.enable(gl.DEPTH_TEST)
 
@@ -103,7 +107,7 @@
     uniformSets.martialArtist.ambientLight.set(gl, ambient)
     uniformSets.martialArtist.lights.set(gl, lights)
 
-    drawScene()
+    drawScene(delta)
 
     gl.useProgram(floorProgram)
     rotatedModel = model.matrix.rotateX(-Math.PI / 2)
@@ -116,4 +120,4 @@
     uniformSets.floor.ambientLight.set(gl, ambient)
     uniformSets.floor.lights.set(gl, lights)
 
-    drawFloor()
+    drawFloor(delta)
