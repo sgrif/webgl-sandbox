@@ -9,6 +9,7 @@ uniform sampler2D specularTexture;
 uniform sampler2D normalMap;
 uniform vec4 lightPosition;
 uniform vec3 lightAngle;
+uniform vec3 lightDirection;
 uniform vec3 ambientColor;
 uniform vec4 cameraPosition;
 uniform float spotAngle;
@@ -19,12 +20,12 @@ const vec3 lightSpecularColor = vec3(0.4, 0.4, 0.4);
 const float shininess = 5.0;
 
 void main() {
-  vec3 lightDirection = normalize(vec3(lightPosition - fragmentPosition));
+  vec3 lightToFragment = normalize(vec3(lightPosition - fragmentPosition));
   vec4 normalMapping = texture2D(normalMap, vec2(fragmentUv.s, fragmentUv.t));
   vec3 normal = normalize(fragmentNormal) * (normalMapping.rgb * 2.0 - 1.0);
 
   float attenuation;
-  float currentAngle = max(0.0, dot(lightDirection, vec3(0.0, 0.0, 1.0)));
+  float currentAngle = max(0.0, dot(lightToFragment, lightDirection));
   float outerSpotAngle = cos(radians(spotAngle));
   if (currentAngle < outerSpotAngle) {
     attenuation = 0.0;
@@ -36,12 +37,12 @@ void main() {
 
   // Specular
   vec3 eyeDirection = normalize(vec3(cameraPosition - fragmentPosition));
-  vec3 reflectionDirection = reflect(-lightDirection, normal);
+  vec3 reflectionDirection = reflect(-lightToFragment, normal);
   float specularWeight = pow(max(dot(reflectionDirection, eyeDirection), 0.0), shininess);
   vec3 specularLight = attenuation * lightSpecularColor * specularWeight;
 
   // Diffuse
-  float diffuseWeight = attenuation * max(dot(normal, lightDirection), 0.0);
+  float diffuseWeight = attenuation * max(dot(normal, lightToFragment), 0.0);
 
   // Apply lighting
   vec3 diffuseLight = ambientColor

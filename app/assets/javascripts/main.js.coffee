@@ -13,6 +13,7 @@
     cameraPosition: Vector4Uniform.build(gl, program, "cameraPosition")
     normalMatrix: Matrix3Uniform.build(gl, program, "normalMatrix")
     lightPosition: Vector4Uniform.build(gl, program, "lightPosition")
+    lightDirection: Vector3Uniform.build(gl, program, "lightDirection")
     ambientLight: ColorUniform.build(gl, program, "ambientColor")
     spotAngle: Uniform.build(gl, program, "spotAngle", "uniform1f")
     penumbraAngle: Uniform.build(gl, program, "penumbraAngle", "uniform1f")
@@ -36,7 +37,7 @@
 
   gui = new dat.GUI()
 
-  ambient = r: 1, g: 1, b: 1
+  ambient = r: 0.1, g: 0.1, b: 0.1
 
   ambientGui = gui.addFolder("Ambient Light")
   ambientGui.add(ambient, "r", 0, 1)
@@ -44,16 +45,12 @@
   ambientGui.add(ambient, "b", 0, 1)
 
   light =
-    position: new OrbitalObject3d(
-      new Vector3(0, 75, 0)
-      new SphericCoordinate(100, Math.PI / 2, 0)
-    )
-    spotAngle: 55
+    position: new Vector3(0, 368.143481165, 360)
+    direction: new Vector3(0, 0.8660254037844197, 0.5)
+    spotAngle: 70
     penumbraAngle: 10
 
   lightGui = gui.addFolder("Light Position")
-  lightGui.add(light.position.rotation, "polar", -Math.PI, Math.PI)
-  lightGui.add(light.position.rotation, "azimuth", -Math.PI, Math.PI)
   lightGui.add(light, "spotAngle", 0, 90)
   lightGui.add(light, "penumbraAngle", 0, 90)
 
@@ -84,7 +81,8 @@
     uniforms.v.set(gl, camera.position.matrix)
     uniforms.p.set(gl, camera.perspective.matrix)
     uniforms.cameraPosition.set(gl, camera.worldPosition)
-    uniforms.lightPosition.set(gl, light.position.eye)
+    uniforms.lightPosition.set(gl, light.position)
+    uniforms.lightDirection.set(gl, light.direction)
     uniforms.ambientLight.set(gl, ambient)
     uniforms.spotAngle.set(gl, light.spotAngle)
     uniforms.penumbraAngle.set(gl, light.penumbraAngle)
