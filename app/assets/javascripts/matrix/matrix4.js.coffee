@@ -100,6 +100,5 @@ class @Matrix4
     ])
 
   @composedOf: (position, quaternion, scale) ->
-    mat = mat4.fromRotationTranslation(mat4.create(), quaternion.toArray(), position.toArray())
-    mat4.scale(mat, mat, scale.toArray())
-    new Matrix4(mat)
+    mat = mat4.fromRotationTranslation(mat4.create(), quaternion, position)
+    mat4.scale(mat, mat, scale)

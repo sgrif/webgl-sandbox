@@ -1,15 +1,8 @@
 class @LazyKeyFrame
-  constructor: (@translationElements, @rotationElements, @scaleElements, @time) ->
+  constructor: (@translation, @rotation, @scale, @time) ->
 
-  Object.defineProperties @prototype,
-    translation:
-      get: ->
-        @_translation ?= new Vector3(@translationElements...)
-
-    rotation:
-      get: ->
-        @_rotation ?= new Quaternion(@rotationElements...)
-
-    scale:
-      get: ->
-        @_scale ?= new Vector3(@scaleElements...)
+  blendWith: (otherKeyframe, time) ->
+    scale = (time - @time) / (otherKeyframe.time - @time)
+    translation: vec3.lerp(vec3.create(), @translation, otherKeyframe.translation, scale)
+    rotation: quat.slerp(quat.create(), @rotation, otherKeyframe.rotation, scale)
+    scale: vec3.lerp(vec3.create(), @scale, otherKeyframe.scale, scale)

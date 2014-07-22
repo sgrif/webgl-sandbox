@@ -1,11 +1,23 @@
 class @JointKeyframes
   constructor: (@keys) ->
 
+  keyframeAt: (time) ->
+    prevKey = @lastKeyBefore(time)
+    nextKey = @firstKeyAfter(time)
+    prevKey.blendWith(nextKey, time)
+
   lastKeyBefore: (time) ->
     bucketIndex = @_bucketIndexFor(time)
     until key?
       key = _.findLast(@buckets[bucketIndex], (key) -> key.time <= time)
       bucketIndex--
+    key
+
+  firstKeyAfter: (time) ->
+    bucketIndex = @_bucketIndexFor(time)
+    until key?
+      key = _.find(@buckets[bucketIndex], (key) -> key.time > time)
+      bucketIndex++
     key
 
   _bucketIndexFor: (time) ->

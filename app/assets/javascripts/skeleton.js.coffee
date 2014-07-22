@@ -4,7 +4,8 @@ class @Skeleton
 
   applyTransformations: (transformations) ->
     for joint, i in @joints
-      joint.relativeTransformationMatrix = transformations[i]
+      { translation, rotation, scale } = transformations[i]
+      joint.relativeTransformationMatrix = Matrix4.composedOf(translation, rotation, scale)
 
   createTexture: (uniforms, index) ->
     image =

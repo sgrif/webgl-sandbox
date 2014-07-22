@@ -9,10 +9,10 @@ class @Joint
 
     relativeTransformationMatrix:
       get: ->
-        @_relativeTransformationMatrix ?= @relativeBindPoseMatrix
+        @_relativeTransformationMatrix ?= new Matrix4(@relativeBindPoseMatrix.elements)
 
       set: (newMatrix) ->
-        @_relativeTransformationMatrix = newMatrix
+        @relativeTransformationMatrix.elements = newMatrix
         @_absoluteTransformationMatrix = undefined
 
     absoluteBindPoseMatrix:
