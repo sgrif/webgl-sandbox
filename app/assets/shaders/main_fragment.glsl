@@ -21,8 +21,7 @@ uniform vec4 cameraPosition;
 uniform Light lights[maxSpotLights];
 uniform float normalScale;
 
-const vec3 lightDiffuseColor = vec3(0.5, 0.5, 0.5);
-const vec3 lightSpecularColor = vec3(0.4, 0.4, 0.4);
+const vec3 lightColor = vec3(1.0);
 const float shininess = 20.0;
 
 vec3 perturbNormal(vec3 normal, vec3 eyeDirection) {
@@ -65,15 +64,15 @@ void main() {
 
     // Specular
     vec3 reflectionDirection = reflect(-lightToFragment, normal);
-    float specularWeight = pow(max(dot(reflectionDirection, eyeDirection), 0.0), shininess);
-    specularLight += attenuation * lightSpecularColor * specularWeight;
+    float specularWeight = pow(max(dot(reflectionDirection, eyeDirection), 0.0), shininess) * 0.5;
+    specularLight += attenuation * lightColor * specularWeight;
 
     // Diffuse
-    float diffuseWeight = max(dot(normal, lightToFragment), 0.0);
-    diffuseLight += attenuation * lightDiffuseColor * diffuseWeight;
+    float diffuseWeight = max(dot(normal, lightToFragment), 0.0) * 0.5;
+    diffuseLight += attenuation * lightColor * diffuseWeight;
   }
 
-  vec4 materialDiffuseColor = texture2D(diffuseTexture, fragmentUv);
+  vec4 materialDiffuseColor = texture2D(diffuseTexture, fragmentUv) * 0.8;
   vec4 materialSpecularColor = texture2D(specularTexture, fragmentUv);
   gl_FragColor = materialDiffuseColor * vec4(diffuseLight, 1.0)
     + materialSpecularColor * vec4(specularLight, 1.0);
