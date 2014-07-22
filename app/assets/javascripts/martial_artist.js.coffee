@@ -14,6 +14,7 @@
     bones: Uniform.build(gl, program, "bones", "uniform1i")
     boneTextureWidth: Uniform.build(gl, program, "boneTextureWidth", "uniform1i")
     boneTextureHeight: Uniform.build(gl, program, "boneTextureHeight", "uniform1i")
+    normalScale: Uniform.build(gl, program, "normalScale", "uniform1f")
 
   buffers =
     faceElements: Buffer.create(gl.ELEMENT_ARRAY_BUFFER, gl)
@@ -186,6 +187,7 @@
       normalMap.render(gl)
       boneTexture.image.data = skeleton.skinMatrices
       boneTexture.render(gl)
+      uniforms.normalScale.set(gl, 0.5)
 
       for name, attribute of attributes
         attribute.populate(gl, buffers[name], attributeData[name])

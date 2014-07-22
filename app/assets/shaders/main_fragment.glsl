@@ -1,3 +1,5 @@
+#extension GL_OES_standard_derivatives : enable
+
 precision mediump float;
 
 const int maxSpotLights = 4;
@@ -17,15 +19,30 @@ uniform sampler2D normalMap;
 uniform vec3 ambientColor;
 uniform vec4 cameraPosition;
 uniform Light lights[maxSpotLights];
+uniform float normalScale;
 
 const vec3 lightDiffuseColor = vec3(0.5, 0.5, 0.5);
 const vec3 lightSpecularColor = vec3(0.4, 0.4, 0.4);
 const float shininess = 20.0;
 
+vec3 perturbNormal(vec3 normal, vec3 eyeDirection) {
+  vec3 q0 = dFdx(eyeDirection);
+  vec3 q1 = dFdy(eyeDirection);
+  vec2 st0 = dFdx(fragmentUv);
+  vec2 st1 = dFdy(fragmentUv);
+
+  vec3 tangent = normalize(q0 * st1.t - q1 * st0.t);
+  vec3 binormal = normalize(-q0 * st1.s + q1 * st0.s);
+
+  vec3 normalMapping = texture2D(normalMap, fragmentUv).xyz * 2.0 - 1.0;
+  normalMapping.xy *= normalScale;
+  mat3 TBN = mat3(tangent, binormal, normal);
+  return normalize(TBN * normalMapping);
+}
+
 void main() {
-  vec4 normalMapping = texture2D(normalMap, fragmentUv);
-  vec3 normal = normalize(fragmentNormal);
   vec3 eyeDirection = normalize(vec3(cameraPosition - fragmentPosition));
+  vec3 normal = perturbNormal(normalize(fragmentNormal), -eyeDirection);
 
   vec3 diffuseLight = ambientColor;
   vec3 specularLight = vec3(0.0);

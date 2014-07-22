@@ -2,6 +2,9 @@
   canvas = document.getElementById("canvas")
   gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
   gl.clearColor(0, 0, 0, 1)
+  gl.getExtension('OES_standard_derivatives')
+
+
   gl.viewport(0, 0, canvas.width * devicePixelRatio, canvas.height * devicePixelRatio)
   canvas.width = Math.round(canvas.clientWidth * devicePixelRatio)
   canvas.height = Math.round(canvas.clientHeight * devicePixelRatio)

@@ -10,6 +10,7 @@
 
   uniforms =
     textureRepeat: Uniform.build(gl, program, "textureRepeat", "uniform2fv")
+    normalScale: Uniform.build(gl, program, "normalScale", "uniform1f")
 
   buffers =
     faceElements: Buffer.create(gl.ELEMENT_ARRAY_BUFFER, gl)
@@ -44,6 +45,7 @@
       diffuseTexture.render(gl)
       specularTexture.render(gl)
       normalMap.render(gl)
+      uniforms.normalScale.set(gl, 1)
 
       for name, attribute of attributes
         attribute.populate(gl, buffers[name], attributeData[name])
