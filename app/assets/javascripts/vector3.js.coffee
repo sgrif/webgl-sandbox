@@ -25,6 +25,9 @@ class @Vector3
   normalize: ->
     @divideScalar(@length)
 
+  toArray: ->
+    [@x, @y, @z]
+
   Object.defineProperties @prototype,
     length:
       get: -> Math.sqrt(@x * @x + @y * @y + @z * @z)

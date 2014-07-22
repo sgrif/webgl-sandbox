@@ -2,6 +2,11 @@ precision mediump float;
 
 const int maxSpotLights = 4;
 
+struct Light {
+  vec4 position, direction;
+  float spotAngle, penumbraAngle;
+};
+
 varying vec2 fragmentUv;
 varying vec3 fragmentNormal;
 varying vec4 fragmentPosition;
@@ -11,10 +16,7 @@ uniform sampler2D specularTexture;
 uniform sampler2D normalMap;
 uniform vec3 ambientColor;
 uniform vec4 cameraPosition;
-uniform vec3 lightPositions[maxSpotLights];
-uniform vec3 lightDirections[maxSpotLights];
-uniform float spotAngles[maxSpotLights];
-uniform float penumbraAngles[maxSpotLights];
+uniform Light lights[maxSpotLights];
 
 const vec3 lightDiffuseColor = vec3(0.5, 0.5, 0.5);
 const vec3 lightSpecularColor = vec3(0.4, 0.4, 0.4);
@@ -29,20 +31,17 @@ void main() {
   vec3 specularLight = vec3(0.0);
 
   for (int i = 0; i < maxSpotLights; i++) {
-    vec4 lightPosition = vec4(lightPositions[i], 1.0);
-    vec3 lightDirection = lightDirections[i];
-    float spotAngle = spotAngles[i];
-    float penumbraAngle = penumbraAngles[i];
+    Light light = lights[i];
 
-    vec3 lightToFragment = normalize(vec3(lightPosition - fragmentPosition));
+    vec3 lightToFragment = normalize(vec3(light.position - fragmentPosition));
 
     float attenuation;
-    float currentAngle = max(0.0, dot(lightToFragment, lightDirection));
-    float outerSpotAngle = cos(radians(spotAngle));
+    float currentAngle = max(0.0, dot(lightToFragment, light.direction.xyz));
+    float outerSpotAngle = cos(radians(light.spotAngle));
     if (currentAngle < outerSpotAngle) {
       attenuation = 0.0;
     } else {
-      float innerSpotAngle = cos(radians(spotAngle - penumbraAngle));
+      float innerSpotAngle = cos(radians(light.spotAngle - light.penumbraAngle));
       attenuation = (currentAngle - outerSpotAngle) / (innerSpotAngle - outerSpotAngle);
       attenuation = clamp(attenuation, 0.0, 1.0);
     }
