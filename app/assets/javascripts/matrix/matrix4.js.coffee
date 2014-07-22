@@ -8,26 +8,8 @@ class @Matrix4
     ]
     @elements = new Float32Array(elements)
 
-  row: (y) -> (x) => @at(y, x)
-  column: (x) -> (y) => @at(y, x)
-  at: (y, x) ->
-    @elements[x + y * 4]
-
   times: (other) ->
-    result = []
-    for y in [0..3]
-      for x in [0..3]
-        result.push(multiplyRows(other.row(y), @column(x)))
-    new Matrix4(result)
-
-  multiplyRows = (row, other) ->
-    result = 0
-    for i in [0..3]
-      result += row(i) * other(i)
-    result
-
-  unwrap = (row) ->
-    row(i) for i in [0..3]
+    new Matrix4(mat4.multiply(mat4.create(), @elements, other.elements))
 
   translate: ({ x, y, z }) ->
     @times(new Matrix4([
@@ -75,9 +57,7 @@ class @Matrix4
     ]))
 
   timesVector: (vector) ->
-    vector = vector.toArray()
-    vectorRow = (i) -> vector[i]
-    result = (multiplyRows(@column(i), vectorRow) for i in [0..3])
+    result = vec4.transformMat4(vec4.create(), vector, @elements)
     new Vector4(result...)
 
   Object.defineProperties @prototype,
@@ -88,11 +68,12 @@ class @Matrix4
       get: -> mat3.normalFromMat4(mat3.create(), @elements)
 
   withPosition: ({ x, y, z }) ->
+    e = @elements
     new Matrix4([
-      unwrap(@row(0))...
-      unwrap(@row(1))...
-      unwrap(@row(2))...
-      x, y, z, @at(3, 3)
+      e[0], e[1], e[2], e[3]
+      e[4], e[5], e[6], e[7]
+      e[8], e[9], e[10], e[11]
+      x, y, z, e[15]
     ])
 
   @lookingAt: (eye, target, up) ->
@@ -119,6 +100,6 @@ class @Matrix4
     ])
 
   @composedOf: (position, quaternion, scale) ->
-    quaternion.toMatrix()
-      .scale(scale)
-      .withPosition(position)
+    mat = mat4.fromRotationTranslation(mat4.create(), quaternion.toArray(), position.toArray())
+    mat4.scale(mat, mat, scale.toArray())
+    new Matrix4(mat)
