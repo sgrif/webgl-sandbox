@@ -58,11 +58,14 @@
       data = JSON.parse(request.responseText)
       skeleton = new SkeletonBuilder(data.bones).build()
       animation = new AnimationBuilder(data.animations[0]).build()
-      window.skeleton = skeleton
-      window.animation = animation
 
       for joint, i in skeleton.joints
-        joint.relativeTransformationMatrix = animation.hierarchy[i][0]
+        keyframe = animation.hierarchy[i][0]
+        joint.relativeTransformationMatrix = Matrix4.composedOf(
+          keyframe.translation
+          keyframe.rotation
+          keyframe.scale
+        )
 
       boneUniforms =
         image: uniforms.bones
