@@ -1,5 +1,5 @@
 class @LazyKeyFrame
-  constructor: (@translationElements, @rotationElements, @scaleElements) ->
+  constructor: (@translationElements, @rotationElements, @scaleElements, @time) ->
 
   Object.defineProperties @prototype,
     translation:

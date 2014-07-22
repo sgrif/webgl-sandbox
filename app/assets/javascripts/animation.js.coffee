@@ -3,7 +3,7 @@ class @Animation
 
   transformationsAtTime: (time) ->
     _.map @hierarchy, (keys) ->
-      keyframe = keys[time] || keys[0]
+      keyframe = keys.lastKeyBefore(time)
       Matrix4.composedOf(
         keyframe.translation
         keyframe.rotation

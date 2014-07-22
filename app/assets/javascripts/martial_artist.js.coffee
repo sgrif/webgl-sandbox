@@ -173,8 +173,15 @@
 
   request.send()
 
+  currentTime = 0
+
   (delta) ->
     if diffuseTexture.loaded && specularTexture.loaded && normalMap.loaded && faceElements?
+      currentTime += delta
+      if currentTime > animator.animation.duration
+        currentTime -= animator.animation.duration
+      animator.setTime(currentTime)
+
       diffuseTexture.render(gl)
       specularTexture.render(gl)
       normalMap.render(gl)
