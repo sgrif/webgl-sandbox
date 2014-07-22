@@ -8,10 +8,11 @@ varying vec4 fragmentPosition;
 
 uniform mat4 m, v, p;
 uniform mat3 normalMatrix;
+uniform vec2 textureRepeat;
 
 void main() {
   fragmentPosition = m * vec4(vertexCoord, 1.0);
   gl_Position = p * v * fragmentPosition;
-  fragmentUv = vertexUv;
+  fragmentUv = vertexUv * textureRepeat;
   fragmentNormal = normalMatrix * vertexNormal;
 }

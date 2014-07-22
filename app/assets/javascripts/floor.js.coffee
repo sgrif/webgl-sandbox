@@ -8,6 +8,9 @@
     vertexUv: VertexAttribute.build(gl, program, "vertexUv")
     vertexNormal: VertexAttribute.build(gl, program, "vertexNormal")
 
+  uniforms =
+    textureRepeat: Uniform.build(gl, program, "textureRepeat", "uniform2fv")
+
   buffers =
     faceElements: Buffer.create(gl.ELEMENT_ARRAY_BUFFER, gl)
     vertexCoord: Buffer.create(gl.ARRAY_BUFFER, gl)
@@ -47,6 +50,8 @@
 
       buffers.faceElements.bind(gl)
       buffers.faceElements.data(gl, faceElements)
+
+      uniforms.textureRepeat.set(gl, new Float32Array([6, 6]))
 
       buffers.faceElements.bind(gl)
       gl.drawElements(gl.TRIANGLES, faceElements.length, gl.UNSIGNED_SHORT, 0)
