@@ -23,7 +23,7 @@ const vec3 lightSpecularColor = vec3(0.4, 0.4, 0.4);
 const float shininess = 20.0;
 
 void main() {
-  vec4 normalMapping = texture2D(normalMap, vec2(fragmentUv.s, fragmentUv.t));
+  vec4 normalMapping = texture2D(normalMap, fragmentUv);
   vec3 normal = normalize(fragmentNormal);
   vec3 eyeDirection = normalize(vec3(cameraPosition - fragmentPosition));
 
@@ -56,8 +56,8 @@ void main() {
     diffuseLight += attenuation * lightDiffuseColor * diffuseWeight;
   }
 
-  vec4 materialDiffuseColor = texture2D(diffuseTexture, vec2(fragmentUv.s, fragmentUv.t));
-  vec4 materialSpecularColor = texture2D(specularTexture, vec2(fragmentUv.s, fragmentUv.t));
+  vec4 materialDiffuseColor = texture2D(diffuseTexture, fragmentUv);
+  vec4 materialSpecularColor = texture2D(specularTexture, fragmentUv);
   gl_FragColor = materialDiffuseColor * vec4(diffuseLight, 1.0)
     + materialSpecularColor * vec4(specularLight, 1.0);
 }
