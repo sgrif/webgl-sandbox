@@ -2,8 +2,8 @@ class @Texture
   constructor: (@src, @uniform, @index = 0) ->
     @loaded = false
     @magFilter = "LINEAR"
-    @minFilter = "LINEAR"
-    @generateMipmap = false
+    @minFilter = "LINEAR_MIPMAP_LINEAR"
+    @generateMipmap = true
     @flipY = true
 
   load: (gl) ->
