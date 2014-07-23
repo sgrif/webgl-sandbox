@@ -3,6 +3,11 @@ class @Joint
     @__absoluteTransformationMatrix = mat4.create()
     @__skinMatrix = mat4.create()
 
+  applyTransformation: ({ translation, rotation, scale }) ->
+    Matrix4.compose(@relativeTransformationMatrix, translation, rotation, scale)
+    @_absoluteTransformationMatrix = undefined
+    @_skinMatrix = undefined
+
   Object.defineProperties @prototype,
     absoluteTransformationMatrix:
       get: ->
@@ -15,12 +20,7 @@ class @Joint
 
     relativeTransformationMatrix:
       get: ->
-        @_relativeTransformationMatrix ?= @relativeBindPoseMatrix.elements
-
-      set: (newMatrix) ->
-        @_relativeTransformationMatrix = newMatrix
-        @_absoluteTransformationMatrix = undefined
-        @_skinMatrix = undefined
+        @_relativeTransformationMatrix ?= new Float32Array(@relativeBindPoseMatrix.elements)
 
     skinMatrix:
       get: ->

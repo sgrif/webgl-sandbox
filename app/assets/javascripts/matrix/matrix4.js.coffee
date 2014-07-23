@@ -118,6 +118,9 @@ class @Matrix4
       0, 0, (2 * far * near) * nearFar, 0
     ])
 
+  @compose: (matrix, position, quaternion, scale) ->
+    mat4.fromRotationTranslation(matrix, quaternion, position)
+    mat4.scale(matrix, matrix, scale)
+
   @composedOf: (position, quaternion, scale) ->
-    mat = mat4.fromRotationTranslation(mat4.create(), quaternion, position)
-    mat4.scale(mat, mat, scale)
+    @compose(mat4.create(), position, quaternion, scale)
