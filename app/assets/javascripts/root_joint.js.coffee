@@ -2,6 +2,7 @@
 
 class @RootJoint extends Joint
   constructor: (@name, @rotation, @translation) ->
+    super(@name, undefined, @rotation, @translation)
 
   Object.defineProperties @prototype,
     absoluteTransformationMatrix:

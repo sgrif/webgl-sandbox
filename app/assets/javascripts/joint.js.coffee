@@ -1,19 +1,35 @@
 class @Joint
   constructor: (@name, @parent, @rotation, @translation) ->
+    @__absoluteTransformationMatrix = mat4.create()
+    @__skinMatrix = mat4.create()
 
   Object.defineProperties @prototype,
     absoluteTransformationMatrix:
       get: ->
         @_absoluteTransformationMatrix ?=
-          @parent.absoluteTransformationMatrix.times(@relativeTransformationMatrix)
+          mat4.multiply(
+            @__absoluteTransformationMatrix
+            @parent.absoluteTransformationMatrix
+            @relativeTransformationMatrix
+          )
 
     relativeTransformationMatrix:
       get: ->
-        @_relativeTransformationMatrix ?= new Matrix4(@relativeBindPoseMatrix.elements)
+        @_relativeTransformationMatrix ?= @relativeBindPoseMatrix.elements
 
       set: (newMatrix) ->
-        @relativeTransformationMatrix.elements = newMatrix
+        @_relativeTransformationMatrix = newMatrix
         @_absoluteTransformationMatrix = undefined
+        @_skinMatrix = undefined
+
+    skinMatrix:
+      get: ->
+        @_skinMatrix ?=
+          mat4.multiply(
+            @__skinMatrix
+            @absoluteTransformationMatrix
+            @absoluteBindPoseMatrix.inverse.elements
+          )
 
     absoluteBindPoseMatrix:
       get: ->
