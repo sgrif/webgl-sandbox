@@ -172,6 +172,14 @@
 
       faceElements = new Uint16Array(faceElements)
 
+      gl.useProgram(program)
+      for name, attribute of attributes
+        attribute.populate(gl, buffers[name], attributeData[name])
+
+      buffers.faceElements.bind(gl)
+      buffers.faceElements.data(gl, faceElements)
+      uniforms.normalScale.set(gl, 0.5)
+
   request.send()
 
   currentTime = 0
@@ -185,15 +193,12 @@
       diffuseTexture.render(gl)
       specularTexture.render(gl)
       normalMap.render(gl)
+
       boneTexture.image.data = skeleton.skinMatrices
       boneTexture.render(gl)
-      uniforms.normalScale.set(gl, 0.5)
 
       for name, attribute of attributes
-        attribute.populate(gl, buffers[name], attributeData[name])
-
-      buffers.faceElements.bind(gl)
-      buffers.faceElements.data(gl, faceElements)
+        attribute.enable(gl, buffers[name], attributeData[name])
 
       buffers.faceElements.bind(gl)
       gl.drawElements(gl.TRIANGLES, faceElements.length, gl.UNSIGNED_SHORT, 0)

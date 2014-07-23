@@ -4,6 +4,10 @@ class @VertexAttribute
   populate: (gl, buffer, arrayData) ->
     buffer.bind(gl)
     buffer.data(gl, arrayData.elements)
+    buffer.unbind(gl)
+
+  enable: (gl, buffer, arrayData) ->
+    buffer.bind(gl)
     gl.enableVertexAttribArray(@location)
     gl.vertexAttribPointer(
       @location

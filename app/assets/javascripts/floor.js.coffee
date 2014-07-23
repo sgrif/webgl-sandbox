@@ -33,6 +33,8 @@
 
   faceElements = new Uint16Array([0, 7, 1, 7, 8, 1, 1, 8, 2, 8, 9, 2, 2, 9, 3, 9, 10, 3, 3, 10, 4, 10, 11, 4, 4, 11, 5, 11, 12, 5, 5, 12, 6, 12, 13, 6, 7, 14, 8, 14, 15, 8, 8, 15, 9, 15, 16, 9, 9, 16, 10, 16, 17, 10, 10, 17, 11, 17, 18, 11, 11, 18, 12, 18, 19, 12, 12, 19, 13, 19, 20, 13, 14, 21, 15, 21, 22, 15, 15, 22, 16, 22, 23, 16, 16, 23, 17, 23, 24, 17, 17, 24, 18, 24, 25, 18, 18, 25, 19, 25, 26, 19, 19, 26, 20, 26, 27, 20, 21, 28, 22, 28, 29, 22, 22, 29, 23, 29, 30, 23, 23, 30, 24, 30, 31, 24, 24, 31, 25, 31, 32, 25, 25, 32, 26, 32, 33, 26, 26, 33, 27, 33, 34, 27, 28, 35, 29, 35, 36, 29, 29, 36, 30, 36, 37, 30, 30, 37, 31, 37, 38, 31, 31, 38, 32, 38, 39, 32, 32, 39, 33, 39, 40, 33, 33, 40, 34, 40, 41, 34, 35, 42, 36, 42, 43, 36, 36, 43, 37, 43, 44, 37, 37, 44, 38, 44, 45, 38, 38, 45, 39, 45, 46, 39, 39, 46, 40, 46, 47, 40, 40, 47, 41, 47, 48, 41])
 
+  gl.useProgram(program)
+
   diffuseTexture = new Texture("/WoodFloor_DIF.png", diffuseTextureSampler, 0)
   diffuseTexture.load(gl)
   specularTexture = new Texture("/WoodFloor_SPC.png", specularTextureSampler, 1)
@@ -40,20 +42,24 @@
   normalMap = new Texture("/WoodFloor_NRM.png", normalMapSampler, 2)
   normalMap.load(gl)
 
+  uniforms.normalScale.set(gl, 1)
+
+  for name, attribute of attributes
+    attribute.populate(gl, buffers[name], attributeData[name])
+
+  buffers.faceElements.bind(gl)
+  buffers.faceElements.data(gl, faceElements)
+
+  uniforms.textureRepeat.set(gl, new Float32Array([6, 6]))
+
   ->
     if diffuseTexture.loaded && specularTexture.loaded && normalMap.loaded && faceElements?
       diffuseTexture.render(gl)
       specularTexture.render(gl)
       normalMap.render(gl)
-      uniforms.normalScale.set(gl, 1)
 
       for name, attribute of attributes
-        attribute.populate(gl, buffers[name], attributeData[name])
-
-      buffers.faceElements.bind(gl)
-      buffers.faceElements.data(gl, faceElements)
-
-      uniforms.textureRepeat.set(gl, new Float32Array([6, 6]))
+        attribute.enable(gl, buffers[name], attributeData[name])
 
       buffers.faceElements.bind(gl)
       gl.drawElements(gl.TRIANGLES, faceElements.length, gl.UNSIGNED_SHORT, 0)
