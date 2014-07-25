@@ -82,7 +82,7 @@ class @Matrix4
 
   Object.defineProperties @prototype,
     inverse:
-      get: -> new Matrix4(mat4.invert(mat4.create(), @elements))
+      get: -> @_inverse ?= new Matrix4(mat4.invert(mat4.create(), @elements))
 
     normalMatrix:
       get: -> mat3.normalFromMat4(mat3.create(), @elements)
